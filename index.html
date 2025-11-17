@@ -13,6 +13,7 @@ body {
     color: #fff;
 }
 
+/* Sterren */
 .ster {
     position: absolute;
     background: white;
@@ -20,9 +21,11 @@ body {
     width: 2px;
     height: 2px;
     animation: twinkle 2s infinite alternate;
+    z-index: 0;
 }
 @keyframes twinkle { 0% { opacity:0.2 } 100% { opacity:1 } }
 
+/* Container */
 .container {
     position: relative;
     z-index: 1;
@@ -32,11 +35,12 @@ body {
     text-align: center;
 }
 
-#start-screen, #game-screen {
-    display: none;
-}
+/* Start & Game schermen */
+#start-screen { display: block; }
+#game-screen { display: none; }
 
 h1 { color: #ff6f61; }
+
 input, select, button { font-size:16px; padding:8px; margin:5px; border-radius:5px; border:none; }
 button { background:#ff6f61; color:white; cursor:pointer; }
 button:hover { background:#ff3b2f; }
@@ -122,6 +126,7 @@ button:hover { background:#ff3b2f; }
     <div id="word-display">_ _ _ _</div>
     <input type="text" id="letter-input" maxlength="1" autofocus>
     <button onclick="guessLetter()">Raad</button>
+
     <p>Foute letters: <span id="wrong-letters"></span></p>
     <button onclick="resetGame()">🔄 Nieuw spel</button>
 </div>
@@ -137,7 +142,8 @@ for(let i=0;i<100;i++){
     star.className='ster';
     star.style.top=Math.random()*100+'%';
     star.style.left=Math.random()*100+'%';
-    star.style.width=star.style.height=1+Math.random()*2+'px';
+    let size = 1+Math.random()*2;
+    star.style.width=star.style.height=size+'px';
     document.body.appendChild(star);
 }
 
@@ -209,7 +215,7 @@ function resetGame(){
     document.getElementById('start-screen').style.display='block';
     document.getElementById('game-screen').style.display='none';
 }
-
 </script>
+
 </body>
 </html>
