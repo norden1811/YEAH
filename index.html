@@ -26,14 +26,14 @@ button:hover {background:#ff3b2f;}
 .galg-part {position:absolute; background:#fff; display:none;}
 .base {bottom:0; left:25px; width:150px; height:10px;} 
 .vert {bottom:10px; left:75px; width:10px; height:200px;} 
-.horiz {top:30px; left:75px; width:100px; height:10px;} 
-.rope {top:40px; left:165px; width:2px; height:40px;} 
-.head {top:80px; left:100px; width:30px; height:30px; border-radius:50%; display:none;}
-.body {top:110px; left:114px; width:2px; height:70px; display:none;}
-.left-arm {top:120px; left:114px; width:40px; height:2px; transform:rotate(-45deg); transform-origin:left center; display:none;}
-.right-arm {top:120px; left:76px; width:40px; height:2px; transform:rotate(45deg); transform-origin:right center; display:none;}
-.left-leg {top:150px; left:114px; width:40px; height:2px; transform:rotate(45deg); transform-origin:left center; display:none;}
-.right-leg {top:150px; left:76px; width:40px; height:2px; transform:rotate(-45deg); transform-origin:right center; display:none;}
+.horiz {top:10px; left:75px; width:100px; height:10px;} 
+.rope {top:10px; left:165px; width:2px; height:40px;} 
+.head {top:50px; left:148px; width:30px; height:30px; border-radius:50%; display:none;}
+.body {top:80px; left:163px; width:2px; height:70px; display:none;}
+.left-arm {top:90px; left:163px; width:40px; height:2px; transform:rotate(-45deg); transform-origin:left center; display:none;}
+.right-arm {top:90px; left:125px; width:40px; height:2px; transform:rotate(45deg); transform-origin:right center; display:none;}
+.left-leg {top:150px; left:163px; width:40px; height:2px; transform:rotate(45deg); transform-origin:left center; display:none;}
+.right-leg {top:150px; left:125px; width:40px; height:2px; transform:rotate(-45deg); transform-origin:right center; display:none;}
 #overlay {position:fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.85); display:flex; justify-content:center; align-items:center; font-size:3em; color:#0f0; flex-direction:column; display:none; z-index:10;}
 #overlay.lose {color:red;}
 #overlay button {font-size:0.5em; margin-top:20px; background:#0ff; color:#000;}
@@ -129,7 +129,7 @@ function startGame(random=true){
     guessed = [];
     wrongLetters = [];
 
-    // DOM-elementen ophalen nu game zichtbaar
+    // DOM-elementen ophalen
     head = document.querySelector('.head');
     body = document.querySelector('.body');
     armsAndLegs = [
@@ -145,6 +145,7 @@ function startGame(random=true){
         document.querySelector('.galg-part.rope')
     ];
 
+    // alles verbergen
     partsSequence.forEach(p => p.style.display='none');
     head.style.display='none';
     body.style.display='none';
