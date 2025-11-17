@@ -3,101 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Klassiek Galgje Deluxe 🎮</title>
+<title>Galgje Deluxe 2.0 🚀</title>
 <style>
 body {
     font-family: 'Courier New', monospace;
-    margin: 0;
+    margin:0;
     background: radial-gradient(ellipse at bottom, #0b0c2a 0%, #070d1a 100%);
-    overflow-x: hidden;
-    color: #fff;
+    overflow:hidden;
+    color:white;
 }
 
 /* Sterren */
 .ster {
-    position: absolute;
-    background: white;
-    border-radius: 50%;
-    width: 2px;
-    height: 2px;
-    animation: twinkle 2s infinite alternate;
-    z-index: 0;
+    position:absolute;
+    background:white;
+    border-radius:50%;
+    width:2px;
+    height:2px;
+    animation:twinkle 2s infinite alternate;
+    z-index:0;
 }
-@keyframes twinkle { 0% { opacity:0.2 } 100% { opacity:1 } }
+@keyframes twinkle {0%{opacity:0.2}100%{opacity:1}}
+
+/* Jupiter */
+#jupiter {position:absolute; top:10%; right:10%; width:100px; height:100px; background:orange; border-radius:50%; box-shadow:0 0 20px 5px orange; z-index:0;}
+
+/* Neon glow letters */
+.neon { text-shadow:0 0 5px #0ff,0 0 10px #0ff,0 0 20px #0ff,0 0 40px #0ff; color:#0ff; }
 
 /* Container */
-.container {
-    position: relative;
-    z-index: 1;
-    max-width: 600px;
-    margin: 0 auto;
-    padding-top: 30px;
-    text-align: center;
-}
+.container {position:relative; z-index:1; max-width:600px; margin:0 auto; padding-top:30px; text-align:center;}
 
-/* Start & Game schermen */
-#start-screen { display: block; }
-#game-screen { display: none; }
+/* Start/Game schermen */
+#start-screen {display:block;}
+#game-screen {display:none;}
 
-h1 { color: #ff6f61; }
+input, select, button {font-size:16px; padding:8px; margin:5px; border-radius:5px; border:none;}
+button {background:#ff6f61; color:white; cursor:pointer;}
+button:hover {background:#ff3b2f;}
 
-input, select, button { font-size:16px; padding:8px; margin:5px; border-radius:5px; border:none; }
-button { background:#ff6f61; color:white; cursor:pointer; }
-button:hover { background:#ff3b2f; }
+#galg {position:relative; width:200px; height:250px; margin:20px auto;}
 
-#galg {
-    position: relative;
-    width: 200px;
-    height: 250px;
-    margin: 20px auto;
-}
+/* Galg onderdelen */
+.galg-part {position:absolute; background:#fff; display:none;}
+.base {bottom:0; left:25px; width:150px; height:10px;}
+.vert {bottom:10px; left:25px; width:10px; height:200px;}
+.horiz {top:0; left:25px; width:100px; height:10px;}
+.rope {top:10px; left:115px; width:2px; height:40px;}
 
-/* Galg onderdelen (pas zichtbaar bij fouten) */
-.galg-part { position:absolute; background:#fff; display:none; }
-.base { bottom:0; left:25px; width:150px; height:10px; }
-.vert { bottom:10px; left:25px; width:10px; height:200px; }
-.horiz { top:0; left:25px; width:100px; height:10px; }
-.rope { top:10px; left:115px; width:2px; height:40px; }
-
-/* Stickman onderdelen */
-.head, .body, .left-arm, .right-arm, .left-leg, .right-leg {
-    position:absolute;
-    background:#fff;
-    display:none;
-}
-.head { top:50px; left:100px; width:30px; height:30px; border-radius:50%; }
-.body { top:80px; left:114px; width:2px; height:70px; }
-.left-arm { top:90px; left:114px; width:40px; height:2px; transform: rotate(-45deg); transform-origin:left center; }
-.right-arm { top:90px; left:76px; width:40px; height:2px; transform: rotate(45deg); transform-origin:right center; }
-.left-leg { top:150px; left:114px; width:40px; height:2px; transform: rotate(45deg); transform-origin:left center; }
-.right-leg { top:150px; left:76px; width:40px; height:2px; transform: rotate(-45deg); transform-origin:right center; }
+/* Stickman */
+.head, .body, .left-arm, .right-arm, .left-leg, .right-leg {position:absolute; background:#fff; display:none;}
+.head {top:50px; left:100px; width:30px; height:30px; border-radius:50%;}
+.body {top:80px; left:114px; width:2px; height:70px;}
+.left-arm {top:90px; left:114px; width:40px; height:2px; transform:rotate(-45deg); transform-origin:left center;}
+.right-arm {top:90px; left:76px; width:40px; height:2px; transform:rotate(45deg); transform-origin:right center;}
+.left-leg {top:150px; left:114px; width:40px; height:2px; transform:rotate(45deg); transform-origin:left center;}
+.right-leg {top:150px; left:76px; width:40px; height:2px; transform:rotate(-45deg); transform-origin:right center;}
 
 /* Overlay */
 #overlay {
-    position: fixed;
-    top:0; left:0; right:0; bottom:0;
+    position:fixed; top:0; left:0; right:0; bottom:0;
     background: rgba(0,0,0,0.85);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 3em;
-    color: #0f0;
-    flex-direction: column;
-    display: none;
-    z-index: 10;
+    display:flex; justify-content:center; align-items:center;
+    font-size:3em; color:#0f0; flex-direction:column; display:none; z-index:10;
 }
-#overlay.lose { color:red; }
+#overlay.lose {color:red;}
+#overlay button {font-size:0.5em; margin-top:20px; background:#0ff; color:#000;}
 
-#word-display { font-size:2em; letter-spacing:10px; margin:15px 0; }
+/* Word display */
+#word-display {font-size:2em; letter-spacing:10px; margin:15px 0;}
+
+/* Confetti */
+.confetti-piece {position:absolute; width:10px; height:10px; opacity:0.9; z-index:20;}
 </style>
 </head>
 <body>
+
+<div id="jupiter"></div>
 
 <div class="container">
 
 <!-- Start scherm -->
 <div id="start-screen">
-    <h1>Klassiek Galgje Deluxe</h1>
+    <h1 class="neon">Galgje Deluxe 2.0</h1>
     <label>Gebruikersnaam: <input type="text" id="username"></label><br>
     <label>Moeilijkheid:
         <select id="difficulty">
@@ -106,20 +94,24 @@ button:hover { background:#ff3b2f; }
             <option value="hard">Moeilijk</option>
         </select>
     </label><br>
+    <label>Thema:
+        <select id="theme">
+            <option value="classic">Klassiek</option>
+            <option value="cyberpunk">Cyberpunk</option>
+            <option value="cartoon">Cartoon</option>
+        </select>
+    </label><br>
     <button onclick="startGame()">Start Spel</button>
 </div>
 
 <!-- Game scherm -->
 <div id="game-screen">
-    <h1>Klassiek Galgje</h1>
+    <h1 class="neon">Galgje</h1>
     <div id="galg">
-        <!-- Galg onderdelen -->
         <div class="galg-part base"></div>
         <div class="galg-part vert"></div>
         <div class="galg-part horiz"></div>
         <div class="galg-part rope"></div>
-
-        <!-- Stickman onderdelen -->
         <div class="head"></div>
         <div class="body"></div>
         <div class="left-arm"></div>
@@ -133,7 +125,7 @@ button:hover { background:#ff3b2f; }
     <button onclick="guessLetter()">Raad</button>
 
     <p>Foute letters: <span id="wrong-letters"></span></p>
-    <button onclick="resetGame()">🔄 Nieuw spel</button>
+    <p>Highscore: <span id="highscore">0</span></p>
 </div>
 
 <div id="overlay"></div>
@@ -141,36 +133,32 @@ button:hover { background:#ff3b2f; }
 </div>
 
 <script>
-// Sterren genereren
-for(let i=0;i<100;i++){
-    let star = document.createElement('div');
+// Sterren
+for(let i=0;i<200;i++){
+    let star=document.createElement('div');
     star.className='ster';
     star.style.top=Math.random()*100+'%';
     star.style.left=Math.random()*100+'%';
-    let size = 1+Math.random()*2;
+    let size=1+Math.random()*3;
     star.style.width=star.style.height=size+'px';
     document.body.appendChild(star);
 }
 
-// Spel variabelen
-let words = ["GITHUB","WEBSITE","JAVASCRIPT","CODING","PROGRAMMA"];
-let word, guessed, wrongLetters, maxWrong, username;
-let partsSequence; // volgorde van galg en stickman
+// Spelvariabelen
+let words=["GITHUB","WEBSITE","JAVASCRIPT","CODING","PROGRAMMA"];
+let word, guessed, wrongLetters, maxWrong, username, theme;
+let partsSequence;
+let highscore=localStorage.getItem('highscore')||0;
+document.getElementById('highscore').textContent=highscore;
 
 function startGame(){
-    username = document.getElementById('username').value || "Speler";
-    let difficulty = document.getElementById('difficulty').value;
-    switch(difficulty){
-        case "easy": maxWrong=8; break;
-        case "normal": maxWrong=6; break;
-        case "hard": maxWrong=4; break;
-    }
-    word = words[Math.floor(Math.random()*words.length)];
-    guessed = [];
-    wrongLetters = [];
-
-    // Volgorde: eerst galg, dan stickman
-    partsSequence = [
+    username=document.getElementById('username').value||"Speler";
+    theme=document.getElementById('theme').value;
+    let difficulty=document.getElementById('difficulty').value;
+    switch(difficulty){case"easy":maxWrong=8;break;case"normal":maxWrong=6;break;case"hard":maxWrong=4;break;}
+    word=words[Math.floor(Math.random()*words.length)];
+    guessed=[]; wrongLetters=[];
+    partsSequence=[
         document.querySelector('.galg-part.base'),
         document.querySelector('.galg-part.vert'),
         document.querySelector('.galg-part.horiz'),
@@ -183,7 +171,6 @@ function startGame(){
         document.querySelector('.right-leg')
     ];
     partsSequence.forEach(p=>p.style.display='none');
-
     document.getElementById('start-screen').style.display='none';
     document.getElementById('game-screen').style.display='block';
     updateWordDisplay();
@@ -192,45 +179,82 @@ function startGame(){
 }
 
 function updateWordDisplay(){
-    let display = '';
-    for(let c of word){
-        display += guessed.includes(c) ? c+' ' : '_ ';
-    }
-    document.getElementById('word-display').textContent = display.trim();
+    let display='';
+    for(let c of word){display+=guessed.includes(c)?c+' ':'_ ';}
+    document.getElementById('word-display').textContent=display.trim();
     if(!display.includes('_')) showResult(true);
 }
 
 function updateGalg(){
-    if(wrongLetters.length>partsSequence.length) return;
+    if(wrongLetters.length>partsSequence.length)return;
     partsSequence[wrongLetters.length-1].style.display='block';
     if(wrongLetters.length>=maxWrong) showResult(false);
 }
 
 function guessLetter(){
-    let input = document.getElementById('letter-input');
-    let letter = input.value.toUpperCase();
-    input.value='';
-    if(!letter || guessed.includes(letter) || wrongLetters.includes(letter)) return;
-
+    let input=document.getElementById('letter-input');
+    let letter=input.value.toUpperCase(); input.value='';
+    if(!letter||guessed.includes(letter)||wrongLetters.includes(letter))return;
     if(word.includes(letter)) guessed.push(letter);
-    else {
+    else{
         wrongLetters.push(letter);
-        document.getElementById('wrong-letters').textContent = wrongLetters.join(', ');
+        document.getElementById('wrong-letters').textContent=wrongLetters.join(', ');
         updateGalg();
     }
     updateWordDisplay();
 }
 
 function showResult(win){
-    let overlay = document.getElementById('overlay');
+    let overlay=document.getElementById('overlay');
     overlay.style.display='flex';
     overlay.className=win?'':'lose';
-    overlay.innerHTML = win ? `🏆 KEIGROOT! ${username} 👏` : `😂 hahahha LOSER! Het woord was: ${word}`;
+    overlay.innerHTML=win?`🏆 KEIGROOT! ${username} 👏`:`😂 hahahha LOSER! Het woord was: ${word}`;
+    // Opnieuw knop
+    let btn=document.createElement('button');
+    btn.textContent='Opnieuw proberen';
+    btn.onclick=()=>{resetGame();};
+    overlay.appendChild(btn);
+
+    if(win){ highscore++; localStorage.setItem('highscore',highscore); document.getElementById('highscore').textContent=highscore; confettiBoom(); stickmanDance();}
+}
+
+// Confetti
+function confettiBoom(){
+    for(let i=0;i<150;i++){
+        let c=document.createElement('div');
+        c.className='confetti-piece';
+        c.style.background=`hsl(${Math.random()*360},100%,50%)`;
+        c.style.left=Math.random()*window.innerWidth+'px';
+        c.style.top='0px';
+        document.body.appendChild(c);
+        let speed=2+Math.random()*3;
+        let angle=(Math.random()-0.5)*2;
+        let fall=setInterval(()=>{
+            let top=parseFloat(c.style.top); let left=parseFloat(c.style.left);
+            c.style.top=top+speed+'px'; c.style.left=left+angle*5+'px';
+            if(top>window.innerHeight){c.remove(); clearInterval(fall);}
+        },20);
+    }
+}
+
+// Stickman juichen
+function stickmanDance(){
+    document.querySelector('.galg-part.rope').style.display='none';
+    let stickman=document.querySelectorAll('.head,.body,.left-arm,.right-arm,.left-leg,.right-leg');
+    let left=0; let dir=1;
+    stickman.forEach(s=>s.style.transition='transform 0.1s');
+    let dance=setInterval(()=>{
+        left+=dir*5;
+        stickman.forEach(s=>s.style.transform=`translateX(${left}px)`);
+        if(left>100||left<-100) dir*=-1;
+    },100);
+    setTimeout(()=>{clearInterval(dance); stickman.forEach(s=>s.style.transform='');},4000);
 }
 
 function resetGame(){
     document.getElementById('start-screen').style.display='block';
     document.getElementById('game-screen').style.display='none';
+    document.getElementById('overlay').style.display='none';
 }
 </script>
 
