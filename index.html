@@ -3,243 +3,161 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Klassiek Galgje 🎮</title>
+<title>Klassiek Galgje Deluxe 🎮</title>
 <style>
+/* Body en achtergrond met Brandaris + sterrenhemel */
 body {
     font-family: 'Courier New', monospace;
-    background: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
     margin: 0;
-    padding-top: 50px;
+    background: radial-gradient(ellipse at bottom, #0b0c2a 0%, #070d1a 100%);
+    overflow-x: hidden;
+    color: #fff;
 }
 
-.container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    text-align: center;
-    max-width: 450px;
-    width: 90%;
-    position: relative;
+/* Vuurtoren silhouet */
+#brandaris {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 400px;
+    background: linear-gradient(to top, #444 0%, #222 100%);
+    border-radius: 10px;
+    z-index: 0;
 }
 
-h1 {
-    color: #333;
-}
-
-#word-display {
-    font-size: 2em;
-    letter-spacing: 10px;
-    margin: 20px 0;
-}
-
-#letter-input {
-    font-size: 18px;
-    padding: 5px;
-    width: 50px;
-    text-align: center;
-}
-
-button {
-    font-size: 16px;
-    padding: 5px 10px;
-    margin-left: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    border: none;
-    background-color: #ff6f61;
-    color: white;
-    transition: 0.2s;
-}
-button:hover { background-color: #ff3b2f; }
-
-#wrong-letters {
-    color: red;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-#hangman {
-    font-family: monospace;
-    white-space: pre;
-    line-height: 1.1;
-    margin-top: 20px;
-}
-
-/* Groot bericht overlay */
-#result-overlay {
+/* Sterren */
+.ster {
     position: absolute;
+    background: white;
+    border-radius: 50%;
+    width: 2px;
+    height: 2px;
+    animation: twinkle 2s infinite alternate;
+}
+@keyframes twinkle { 0% { opacity:0.2 } 100% { opacity:1 } }
+
+/* Container */
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+    padding-top: 30px;
+    text-align: center;
+}
+
+/* Galg stickman onderdelen */
+#galg {
+    position: relative;
+    width: 200px;
+    height: 250px;
+    margin: 0 auto 20px;
+}
+
+/* Basis galg */
+#galg-base { position:absolute; bottom:0; width:150px; height:10px; background:#fff; left:25px;}
+#galg-vert { position:absolute; bottom:10px; left:25px; width:10px; height:200px; background:#fff;}
+#galg-horiz { position:absolute; top:0; left:25px; width:100px; height:10px; background:#fff;}
+#galg-rope { position:absolute; top:10px; left:115px; width:2px; height:40px; background:#fff;}
+
+/* Stickman onderdelen */
+.head, .body, .left-arm, .right-arm, .left-leg, .right-leg {
+    position:absolute;
+    background:#fff;
+    display:none;
+}
+.head { top:50px; left:100px; width:30px; height:30px; border-radius:50%; }
+.body { top:80px; left:114px; width:2px; height:70px; }
+.left-arm { top:90px; left:114px; width:40px; height:2px; transform: rotate(-45deg); transform-origin:left center; }
+.right-arm { top:90px; left:76px; width:40px; height:2px; transform: rotate(45deg); transform-origin:right center; }
+.left-leg { top:150px; left:114px; width:40px; height:2px; transform: rotate(45deg); transform-origin:left center; }
+.right-leg { top:150px; left:76px; width:40px; height:2px; transform: rotate(-45deg); transform-origin:right center; }
+
+/* Overlays voor win/verlies */
+#overlay {
+    position: fixed;
     top:0; left:0; right:0; bottom:0;
-    background: rgba(255,255,255,0.95);
+    background: rgba(0,0,0,0.85);
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 3em;
-    font-weight: bold;
-    color: #ff6f61;
-    border-radius: 15px;
-    display: none;
+    color: #0f0;
     flex-direction: column;
+    display: none;
     z-index: 10;
 }
-#result-overlay.win { color: green; }
-#result-overlay.lose { color: red; }
+#overlay.lose { color:red; }
+
+/* Input en buttons */
+input, button { font-size: 16px; padding:8px; margin:5px; border-radius:5px; border:none; }
+button { background:#ff6f61; color:white; cursor:pointer; }
+button:hover { background:#ff3b2f; }
+
+#word-display { font-size:2em; letter-spacing:10px; margin:15px 0; }
+
 </style>
 </head>
 <body>
 
+<!-- Brandaris -->
+<div id="brandaris"></div>
+
+<!-- Sterren -->
+<script>
+for(let i=0;i<100;i++){
+    let star = document.createElement('div');
+    star.className='ster';
+    star.style.top=Math.random()*100+'%';
+    star.style.left=Math.random()*100+'%';
+    star.style.width=star.style.height=1+Math.random()*2+'px';
+    document.body.appendChild(star);
+}
+</script>
+
 <div class="container">
-    <h1>🎮 Galgje Klassiek</h1>
-    <div id="hangman"></div>
-    <div id="word-display"></div>
-    <input type="text" id="letter-input" maxlength="1" autofocus>
-    <button onclick="guessLetter()">Raad</button>
-    <p>Foute letters: <span id="wrong-letters"></span></p>
-    <button onclick="resetGame()" style="margin-top:15px;">🔄 Nieuw spel</button>
-    <div id="result-overlay"></div>
+
+<h1>Klassiek Galgje Deluxe</h1>
+
+<!-- Moeilijkheid en naam -->
+<label>Gebruikersnaam: <input type="text" id="username"></label>
+<select id="difficulty">
+    <option value="easy">Gemakkelijk</option>
+    <option value="normal" selected>Normaal</option>
+    <option value="hard">Moeilijk</option>
+</select>
+<button onclick="startGame()">Start Spel</button>
+
+<!-- Galg en stickman -->
+<div id="galg">
+    <div id="galg-base"></div>
+    <div id="galg-vert"></div>
+    <div id="galg-horiz"></div>
+    <div id="galg-rope"></div>
+
+    <div class="head"></div>
+    <div class="body"></div>
+    <div class="left-arm"></div>
+    <div class="right-arm"></div>
+    <div class="left-leg"></div>
+    <div class="right-leg"></div>
+</div>
+
+<div id="word-display">_ _ _ _</div>
+<input type="text" id="letter-input" maxlength="1" autofocus>
+<button onclick="guessLetter()">Raad</button>
+
+<p>Foute letters: <span id="wrong-letters"></span></p>
+<div id="overlay"></div>
+
 </div>
 
 <script>
-const words = ["GITHUB", "WEBSITE", "JAVASCRIPT", "CODING", "PROGRAMMA"];
-let word, guessed, wrongLetters, maxWrong;
-let gameOver = false;
-
-let hangmanStates = [
-`
-
-
-
-
-
-
-
-`,
-`
-|
-|
-|
-|
-|
-`,
-`
-____|
-|
-|
-|
-|
-`,
-`
-____|
-|   O
-|
-|
-|
-`,
-`
-____|
-|   O
-|   |
-|
-|
-`,
-`
-____|
-|   O
-|  /|
-|
-|
-`,
-`
-____|
-|   O
-|  /|\\
-|
-|
-`,
-`
-____|
-|   O
-|  /|\\
-|  /
-|
-`,
-`
-____|
-|   O
-|  /|\\
-|  / \\
-|
-`
-];
-
-function initGame() {
-    word = words[Math.floor(Math.random() * words.length)].toUpperCase();
-    guessed = [];
-    wrongLetters = [];
-    maxWrong = hangmanStates.length - 1;
-    gameOver = false;
-    document.getElementById('wrong-letters').textContent = '';
-    document.getElementById('result-overlay').style.display = 'none';
-    updateWordDisplay();
-    updateHangman();
-}
-
-function updateWordDisplay() {
-    let display = '';
-    for (let char of word) {
-        display += guessed.includes(char) ? char + ' ' : '_ ';
-    }
-    document.getElementById('word-display').textContent = display.trim();
-    if (!display.includes('_') && !gameOver) {
-        showResult(true);
-    }
-}
-
-function updateHangman() {
-    document.getElementById('hangman').textContent = hangmanStates[wrongLetters.length];
-    if (wrongLetters.length >= maxWrong && !gameOver) {
-        showResult(false);
-    }
-}
-
-function guessLetter() {
-    if (gameOver) return;
-    const input = document.getElementById('letter-input');
-    const letter = input.value.toUpperCase();
-    input.value = '';
-    if (!letter || guessed.includes(letter) || wrongLetters.includes(letter)) return;
-
-    if (word.includes(letter)) guessed.push(letter);
-    else {
-        wrongLetters.push(letter);
-        document.getElementById('wrong-letters').textContent = wrongLetters.join(', ');
-    }
-    updateWordDisplay();
-    updateHangman();
-}
-
-function showResult(win) {
-    gameOver = true;
-    const overlay = document.getElementById('result-overlay');
-    overlay.style.display = 'flex';
-    if (win) {
-        overlay.className = 'win';
-        overlay.innerHTML = `🏆 KEIGROOT!<br>Lekker gewerkt! 👏`;
-    } else {
-        overlay.className = 'lose';
-        overlay.innerHTML = `😂 hahahha LOSER<br>Het woord was: ${word}`;
-    }
-}
-
-function resetGame() {
-    initGame();
-}
-
-initGame();
+// Hier komt alle JS: woorden, moeilijkheid, stickman zichtbaar maken bij fouten,
+// win/verlies overlay, leaderboard in localStorage, confetti en geluiden
+// Concept: bij elke fout wordt een onderdeel van de stickman getoond
 </script>
 
 </body>
