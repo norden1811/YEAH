@@ -3,10 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mijn Website</title>
+    <title>Mijn Website met Spel</title>
 </head>
 <body>
     <h1>Welkom op mijn website!</h1>
     <p>Dit is mijn eerste GitHub Pages site.</p>
+
+    <h2>Raad het getal!</h2>
+    <p>Ik denk aan een getal tussen 1 en 100. Raad welk getal het is!</p>
+
+    <input type="number" id="guess" placeholder="Typ hier je gok">
+    <button onclick="checkGuess()">Raad!</button>
+    <p id="message"></p>
+
+    <script>
+        const secretNumber = Math.floor(Math.random() * 100) + 1;
+
+        function checkGuess() {
+            const guess = Number(document.getElementById('guess').value);
+            const message = document.getElementById('message');
+
+            if (guess === secretNumber) {
+                message.textContent = `🎉 Goed gedaan! Het getal was ${secretNumber}.`;
+            } else if (guess < secretNumber) {
+                message.textContent = "📈 Te laag, probeer hoger!";
+            } else {
+                message.textContent = "📉 Te hoog, probeer lager!";
+            }
+        }
+    </script>
 </body>
 </html>
