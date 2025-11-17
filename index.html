@@ -24,16 +24,19 @@ button {background:#ff6f61; color:white; cursor:pointer;}
 button:hover {background:#ff3b2f;}
 #galg {position:relative; width:200px; height:250px; margin:20px auto;}
 .galg-part {position:absolute; background:#fff; display:none;}
-.base {bottom:0; left:25px; width:150px; height:10px;} 
-.vert {bottom:10px; left:75px; width:10px; height:200px;} 
-.horiz {top:10px; left:75px; width:100px; height:10px;} 
-.rope {top:10px; left:165px; width:2px; height:40px;} 
-.head {top:50px; left:148px; width:30px; height:30px; border-radius:50%; display:none;}
-.body {top:80px; left:163px; width:2px; height:70px; display:none;}
-.left-arm {top:90px; left:163px; width:40px; height:2px; transform:rotate(-45deg); transform-origin:left center; display:none;}
-.right-arm {top:90px; left:125px; width:40px; height:2px; transform:rotate(45deg); transform-origin:right center; display:none;}
-.left-leg {top:150px; left:163px; width:40px; height:2px; transform:rotate(45deg); transform-origin:left center; display:none;}
-.right-leg {top:150px; left:125px; width:40px; height:2px; transform:rotate(-45deg); transform-origin:right center; display:none;}
+.base { bottom:0; left:25px; width:150px; height:10px; } 
+.vert { bottom:10px; left:75px; width:10px; height:200px; } 
+.horiz { top:0px; left:75px; width:100px; height:10px; } /* horizontaal strak op verticaal */
+.rope { top:10px; left:165px; width:2px; height:40px; }
+
+/* Stickman */
+.head { top:50px; left:146px; width:30px; height:30px; border-radius:50%; display:none; }
+.body { top:80px; left:160px; width:2px; height:70px; display:none; }
+.left-arm { top:90px; left:160px; width:40px; height:2px; transform:rotate(-45deg); transform-origin:left center; display:none; }
+.right-arm { top:90px; left:122px; width:40px; height:2px; transform:rotate(45deg); transform-origin:right center; display:none; }
+.left-leg { top:150px; left:160px; width:40px; height:2px; transform:rotate(45deg); transform-origin:left center; display:none; }
+.right-leg { top:150px; left:122px; width:40px; height:2px; transform:rotate(-45deg); transform-origin:right center; display:none; }
+
 #overlay {position:fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.85); display:flex; justify-content:center; align-items:center; font-size:3em; color:#0f0; flex-direction:column; display:none; z-index:10;}
 #overlay.lose {color:red;}
 #overlay button {font-size:0.5em; margin-top:20px; background:#0ff; color:#000;}
@@ -50,7 +53,7 @@ button:hover {background:#ff3b2f;}
 <div class="container">
 
 <div id="start-screen">
-    <h1 class="neon">Galgje Deluxe 2.0</h1>
+    <h1 class="neon">Galgje Deluxe 3.0</h1>
     <p>Kies je spelmodus:</p>
     <button onclick="chooseMode('computer')">Tegen de computer</button>
     <button onclick="chooseMode('2p')">2 personen</button>
@@ -179,7 +182,8 @@ function updateWordDisplay(){
 function updateGalg(){
     let len = wrongLetters.length;
     // eerste 4 fouten: galg-balken + touw
-    for (let i=0; i<Math.min(len,4); i++) partsSequence[i].style.display='block';
+    for (let i=0;i<Math.min(len,4);i++) partsSequence[i].style.display='block';
+
     if(len===5) head.style.display='block';
     else if(len===6) body.style.display='block';
     else if(len===7){
