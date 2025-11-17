@@ -26,7 +26,7 @@ button:hover {background:#ff3b2f;}
 .galg-part {position:absolute; background:#fff; display:none;}
 .base {bottom:0; left:25px; width:150px; height:10px;} 
 .vert {bottom:10px; left:75px; width:10px; height:200px;} 
-.horiz {top:30px; left:75px; width:100px; height:10px;} /* horizontaal lager gezet */
+.horiz {top:30px; left:75px; width:100px; height:10px;} 
 .rope {top:40px; left:165px; width:2px; height:40px;} 
 .head {top:80px; left:100px; width:30px; height:30px; border-radius:50%; display:none;}
 .body {top:110px; left:114px; width:2px; height:70px; display:none;}
@@ -49,7 +49,6 @@ button:hover {background:#ff3b2f;}
 
 <div class="container">
 
-<!-- Start scherm -->
 <div id="start-screen">
     <h1 class="neon">Galgje Deluxe 2.0</h1>
     <p>Kies je spelmodus:</p>
@@ -57,14 +56,12 @@ button:hover {background:#ff3b2f;}
     <button onclick="chooseMode('2p')">2 personen</button>
 </div>
 
-<!-- Woordinvoer scherm voor 2 spelers -->
 <div id="word-entry-screen" style="display:none;">
     <h2>Speler 1, voer een woord in:</h2>
     <input type="text" id="p1-word" maxlength="20">
     <button onclick="start2PGame()">Start raden</button>
 </div>
 
-<!-- Game scherm -->
 <div id="game-screen">
     <h1 class="neon">Galgje</h1>
     <div id="galg">
@@ -87,7 +84,6 @@ button:hover {background:#ff3b2f;}
     <p>Foute letters: <span id="wrong-letters"></span></p>
     <p>Highscore: <span id="highscore">0</span></p>
 
-    <!-- IK GEEF OP knop -->
     <button id="give-up-btn" onclick="giveUp()">IK GEEF OP IK BEN EEN NIKS</button>
 </div>
 
@@ -109,19 +105,10 @@ for(let i=0;i<200;i++){
 
 // Variabelen
 let words=["GITHUB","WEBSITE","JAVASCRIPT","CODING","PROGRAMMA"];
-let word, guessed=[], wrongLetters=[], maxWrong=7, username, theme, mode="computer";
+let word, guessed=[], wrongLetters=[], maxWrong=7, mode="computer";
+let head, body, armsAndLegs=[], partsSequence=[];
 let highscore=localStorage.getItem('highscore')||0;
 document.getElementById('highscore').textContent=highscore;
-
-// Stickman onderdelen
-let head = document.querySelector('.head');
-let body = document.querySelector('.body');
-let armsAndLegs = [
-    document.querySelector('.left-arm'),
-    document.querySelector('.right-arm'),
-    document.querySelector('.left-leg'),
-    document.querySelector('.right-leg')
-];
 
 // Functies
 function chooseMode(selected){
@@ -134,30 +121,53 @@ function start2PGame(){
     word = document.getElementById('p1-word').value.toUpperCase();
     document.getElementById('p1-word').value='';
     document.getElementById('word-entry-screen').style.display='none';
-    startGame(false); // false = niet random word
+    startGame(false);
 }
 
 function startGame(random=true){
-    if(random) word=words[Math.floor(Math.random()*words.length)];
-    guessed=[]; wrongLetters=[];
-    head.style.display='none';
-    body.style.display='none';
-    armsAndLegs.forEach(p=>p.style.display='none');
-    partsSequence.forEach(p=>p.style.display='none');
+    if(random) word = words[Math.floor(Math.random()*words.length)];
+    guessed = [];
+    wrongLetters = [];
+
+    // DOM-elementen ophalen
+    head = document.querySelector('.head');
+    body = document.querySelector('.body');
+    armsAndLegs = [
+        document.querySelector('.left-arm'),
+        document.querySelector('.right-arm'),
+        document.querySelector('.left-leg'),
+        document.querySelector('.right-leg')
+    ];
+    partsSequence = [
+        document.querySelector('.galg-part.base'),
+        document.querySelector('.galg-part.vert'),
+        document.querySelector('.galg-part.horiz'),
+        document.querySelector('.galg-part.rope')
+    ];
+
+    // alles verbergen
+    partsSequence.forEach(p => p.style.display='none');
+    head.style.display = 'none';
+    body.style.display = 'none';
+    armsAndLegs.forEach(p => p.style.display='none');
+
     document.getElementById('start-screen').style.display='none';
+    document.getElementById('word-entry-screen').style.display='none';
     document.getElementById('game-screen').style.display='block';
+
     updateWordDisplay();
-    document.getElementById('wrong-letters').textContent='';
-    document.getElementById('overlay').style.display='none';
+    document.getElementById('wrong-letters').textContent = '';
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('letter-input').focus();
 }
 
-// Galg onderdelen
-let partsSequence = [
-    document.querySelector('.galg-part.base'),
-    document.querySelector('.galg-part.vert'),
-    document.querySelector('.galg-part.horiz'),
-    document.querySelector('.galg-part.rope')
-];
+// Enter-toets functie
+let letterInput = document.getElementById('letter-input');
+letterInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ 
+        guessLetter();
+    }
+});
 
 function updateWordDisplay(){
     let display='';
@@ -175,24 +185,35 @@ function updateGalg(){
 }
 
 function guessLetter(){
-    let input=document.getElementById('letter-input');
-    let letter=input.value.toUpperCase(); input.value='';
-    if(!letter||guessed.includes(letter)||wrongLetters.includes(letter)) return;
+    let letter = letterInput.value.toUpperCase();
+    letterInput.value = '';
+    letterInput.focus();
+    if(!letter || guessed.includes(letter) || wrongLetters.includes(letter)) return;
     if(word.includes(letter)) guessed.push(letter);
-    else{ wrongLetters.push(letter); document.getElementById('wrong-letters').textContent=wrongLetters.join(', '); updateGalg();}
+    else{
+        wrongLetters.push(letter);
+        document.getElementById('wrong-letters').textContent = wrongLetters.join(', ');
+        updateGalg();
+    }
     updateWordDisplay();
 }
 
 function showResult(win){
-    let overlay=document.getElementById('overlay');
-    overlay.style.display='flex';
-    overlay.className=win?'':'lose';
-    overlay.innerHTML=win?`<span style="font-size:4em">YEEEEEEEAH</span>`:`😂 hahahha LOSER! Het woord was: ${word}`;
-    let btn=document.createElement('button');
-    btn.textContent='Opnieuw proberen';
-    btn.onclick=()=>{resetGame();};
+    let overlay = document.getElementById('overlay');
+    overlay.style.display = 'flex';
+    overlay.className = win?'':'lose';
+    overlay.innerHTML = win?`<span style="font-size:4em">YEEEEEEEAH</span>`:`😂 hahahha LOSER! Het woord was: ${word}`;
+    let btn = document.createElement('button');
+    btn.textContent = 'Opnieuw proberen';
+    btn.onclick = resetGame;
     overlay.appendChild(btn);
-    if(win){ highscore++; localStorage.setItem('highscore',highscore); document.getElementById('highscore').textContent=highscore; confettiBoom(); stickmanDance();}
+    if(win){ 
+        highscore++;
+        localStorage.setItem('highscore', highscore);
+        document.getElementById('highscore').textContent = highscore;
+        confettiBoom();
+        stickmanDance();
+    }
 }
 
 // Confetti
@@ -228,9 +249,14 @@ function stickmanDance(){
     setTimeout(()=>{clearInterval(dance); stickman.forEach(s=>s.style.transform='');},4000);
 }
 
-// Geef op knop
+// Geef op
 function giveUp(){ resetGame(); }
-function resetGame(){ document.getElementById('start-screen').style.display='block'; document.getElementById('game-screen').style.display='none'; document.getElementById('word-entry-screen').style.display='none'; document.getElementById('overlay').style.display='none'; }
+function resetGame(){
+    document.getElementById('start-screen').style.display='block';
+    document.getElementById('game-screen').style.display='none';
+    document.getElementById('word-entry-screen').style.display='none';
+    document.getElementById('overlay').style.display='none';
+}
 </script>
 
 </body>
