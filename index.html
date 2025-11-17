@@ -46,10 +46,10 @@ button:hover {background:#ff3b2f;}
 
 /* Galg onderdelen */
 .galg-part {position:absolute; background:#fff; display:none;}
-.base {bottom:0; left:25px; width:150px; height:10px;} /* basis op vloer */
-.vert {bottom:10px; left:75px; width:10px; height:200px;} /* verticale steun exact onder horizontale balk */
-.horiz {top:0; left:75px; width:100px; height:10px;} /* horizontale balk begint bij verticale steun */
-.rope {top:10px; left:165px; width:2px; height:40px;} /* touw aan het einde van horizontale balk */
+.base {bottom:0; left:25px; width:150px; height:10px;} 
+.vert {bottom:10px; left:75px; width:10px; height:200px;} 
+.horiz {top:0; left:75px; width:100px; height:10px;} 
+.rope {top:10px; left:165px; width:2px; height:40px;} 
 
 /* Stickman */
 .head, .body, .left-arm, .right-arm, .left-leg, .right-leg {position:absolute; background:#fff; display:none;}
@@ -75,6 +75,13 @@ button:hover {background:#ff3b2f;}
 
 /* Confetti */
 .confetti-piece {position:absolute; width:10px; height:10px; opacity:0.9; z-index:20;}
+
+/* IK GEEF OP knop */
+#give-up-btn {
+    background:#ff0000; color:white; font-weight:bold; padding:10px 15px; margin:15px;
+    border-radius:5px; cursor:pointer;
+}
+#give-up-btn:hover {background:#cc0000;}
 </style>
 </head>
 <body>
@@ -126,6 +133,9 @@ button:hover {background:#ff3b2f;}
 
     <p>Foute letters: <span id="wrong-letters"></span></p>
     <p>Highscore: <span id="highscore">0</span></p>
+
+    <!-- IK GEEF OP knop -->
+    <button id="give-up-btn" onclick="giveUp()">IK GEEF OP IK BEN EEN NIKS</button>
 </div>
 
 <div id="overlay"></div>
@@ -188,7 +198,7 @@ function updateWordDisplay(){
 function updateGalg(){
     if(wrongLetters.length>partsSequence.length)return;
     partsSequence[wrongLetters.length-1].style.display='block';
-    // Controle: verlies pas bij laatste onderdeel (rechtervoet)
+    // verlies pas bij laatste onderdeel (rechtervoet)
     if(partsSequence[wrongLetters.length-1].classList.contains('right-leg')) showResult(false);
 }
 
@@ -250,6 +260,11 @@ function stickmanDance(){
         if(left>100||left<-100) dir*=-1;
     },100);
     setTimeout(()=>{clearInterval(dance); stickman.forEach(s=>s.style.transform='');},4000);
+}
+
+// IK GEEF OP knop
+function giveUp(){
+    resetGame();
 }
 
 function resetGame(){
