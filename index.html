@@ -51,10 +51,13 @@ button:hover { background:#ff3b2f; }
     height: 250px;
     margin: 20px auto;
 }
-#galg-base { position:absolute; bottom:0; width:150px; height:10px; background:#fff; left:25px;}
-#galg-vert { position:absolute; bottom:10px; left:25px; width:10px; height:200px; background:#fff;}
-#galg-horiz { position:absolute; top:0; left:25px; width:100px; height:10px; background:#fff;}
-#galg-rope { position:absolute; top:10px; left:115px; width:2px; height:40px; background:#fff;}
+
+/* Galg onderdelen (pas zichtbaar bij fouten) */
+.galg-part { position:absolute; background:#fff; display:none; }
+.base { bottom:0; left:25px; width:150px; height:10px; }
+.vert { bottom:10px; left:25px; width:10px; height:200px; }
+.horiz { top:0; left:25px; width:100px; height:10px; }
+.rope { top:10px; left:115px; width:2px; height:40px; }
 
 /* Stickman onderdelen */
 .head, .body, .left-arm, .right-arm, .left-leg, .right-leg {
@@ -110,11 +113,13 @@ button:hover { background:#ff3b2f; }
 <div id="game-screen">
     <h1>Klassiek Galgje</h1>
     <div id="galg">
-        <div id="galg-base"></div>
-        <div id="galg-vert"></div>
-        <div id="galg-horiz"></div>
-        <div id="galg-rope"></div>
+        <!-- Galg onderdelen -->
+        <div class="galg-part base"></div>
+        <div class="galg-part vert"></div>
+        <div class="galg-part horiz"></div>
+        <div class="galg-part rope"></div>
 
+        <!-- Stickman onderdelen -->
         <div class="head"></div>
         <div class="body"></div>
         <div class="left-arm"></div>
@@ -150,7 +155,7 @@ for(let i=0;i<100;i++){
 // Spel variabelen
 let words = ["GITHUB","WEBSITE","JAVASCRIPT","CODING","PROGRAMMA"];
 let word, guessed, wrongLetters, maxWrong, username;
-let stickmanParts;
+let partsSequence; // volgorde van galg en stickman
 
 function startGame(){
     username = document.getElementById('username').value || "Speler";
@@ -163,8 +168,21 @@ function startGame(){
     word = words[Math.floor(Math.random()*words.length)];
     guessed = [];
     wrongLetters = [];
-    stickmanParts = document.querySelectorAll('.head, .body, .left-arm, .right-arm, .left-leg, .right-leg');
-    stickmanParts.forEach(p=>p.style.display='none');
+
+    // Volgorde: eerst galg, dan stickman
+    partsSequence = [
+        document.querySelector('.galg-part.base'),
+        document.querySelector('.galg-part.vert'),
+        document.querySelector('.galg-part.horiz'),
+        document.querySelector('.galg-part.rope'),
+        document.querySelector('.head'),
+        document.querySelector('.body'),
+        document.querySelector('.left-arm'),
+        document.querySelector('.right-arm'),
+        document.querySelector('.left-leg'),
+        document.querySelector('.right-leg')
+    ];
+    partsSequence.forEach(p=>p.style.display='none');
 
     document.getElementById('start-screen').style.display='none';
     document.getElementById('game-screen').style.display='block';
@@ -182,10 +200,9 @@ function updateWordDisplay(){
     if(!display.includes('_')) showResult(true);
 }
 
-function updateStickman(){
-    for(let i=0;i<wrongLetters.length;i++){
-        if(i<stickmanParts.length) stickmanParts[i].style.display='block';
-    }
+function updateGalg(){
+    if(wrongLetters.length>partsSequence.length) return;
+    partsSequence[wrongLetters.length-1].style.display='block';
     if(wrongLetters.length>=maxWrong) showResult(false);
 }
 
@@ -199,7 +216,7 @@ function guessLetter(){
     else {
         wrongLetters.push(letter);
         document.getElementById('wrong-letters').textContent = wrongLetters.join(', ');
-        updateStickman();
+        updateGalg();
     }
     updateWordDisplay();
 }
