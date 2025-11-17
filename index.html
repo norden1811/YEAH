@@ -99,12 +99,54 @@ button:hover { transform: scale(1.07); }
 #beam { width: 120px; height: 10px; top: 0; left: 50px; }
 #rope { width: 5px; height: 35px; top: 10px; left: 165px; }
 
-#head { width: 40px; height: 40px; border-radius: 50%; border: 4px solid white; left: 145px; top: 45px; background: none; }
-#body { width: 4px; height: 80px; left: 164px; top: 85px; }
-#armL { width: 50px; height: 4px; left: 118px; top: 105px; transform: rotate(-25deg); }
-#armR { width: 50px; height: 4px; left: 165px; top: 105px; transform: rotate(25deg); }
-#legL { width: 50px; height: 4px; left: 118px; top: 155px; transform: rotate(25deg); }
-#legR { width: 50px; height: 4px; left: 165px; top: 155px; transform: rotate(-25deg); }
+#head {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 4px solid white;
+    left: 150px;
+    top: 55px;
+    background: none;
+}
+
+#body {
+    width: 4px;
+    height: 80px;
+    left: 169px;
+    top: 95px;
+}
+
+#armL {
+    width: 50px;
+    height: 4px;
+    left: 129px;
+    top: 115px;
+    transform: rotate(-25deg);
+}
+
+#armR {
+    width: 50px;
+    height: 4px;
+    left: 170px;
+    top: 115px;
+    transform: rotate(25deg);
+}
+
+#legL {
+    width: 50px;
+    height: 4px;
+    left: 129px;
+    top: 175px;
+    transform: rotate(25deg);
+}
+
+#legR {
+    width: 50px;
+    height: 4px;
+    left: 170px;
+    top: 175px;
+    transform: rotate(-25deg);
+}
 
 #word-display {
     font-size: 2rem;
@@ -200,7 +242,7 @@ button:hover { transform: scale(1.07); }
 <div id="overlay"></div>
 
 <script>
-// ✅ Galgje Deluxe 4.3 Top 100 woorden met correcte galg-opbouw
+// ✅ Galgje Deluxe 4.3 Top 100 woorden met correcte stickman positie
 const randomNames = ["🔥 Turbo Toeter", "🤣 Domme Dolfijn", "🍟 Frikandel Koning", "💀 Pepernoot Ninja", "🦍 Alpha Mug", "🎯 Aimloos Kind", "🚽 WC Legende", "🦧 Natte Gorilla"];
 const words = ["DE","EN","VAN","IK","TE","DAT","DIE","IN","HET","WIJ","JE","ZE","MET","OP","NIEUWE","VOOR","ALS","NA","IS","MAAR","OOK","WAT","ZO","DOOR","BIJ","HUN","HELE","AL","OVER","WORDEN","DOEN","KUNNEN","HEN","ONDER","GEEN","TOT","MEER","MEE","MIJN","JOUW","ZIJN","HIER","DAAR","TOCH","GEWEEST","ALTIJD","VANAF","ONZE","JOU","U","DANK","TUSSEN","TIJD","KAN","MOET","NOG","HETZELFDE","ANDERE","OOK","ALLE","GROTE","KLEINE","NOGAL","SOMMIGE","ALLES","NOG","VANDAAG","MORGEN","GISTEREN","OVERAL","SLECHTS","SPEL","KINDEREN","MENSEN","GOED","NOG","ZELF","DAARNA","BEGON","GEKOMEN","GELOPEN","GEVONDEN","GESPROKEN","GEZEGD","GEKEND","GELEERD","GESTART","GEKREGEN","GEZAGEN","GEHOORD","GEMAAKT","GEDAAN","GEKOMEN"];
 
@@ -258,22 +300,22 @@ function guess(){
     if(!document.getElementById("word-display").innerText.includes("_")) win();
 }
 
-// 🔥 Galg-opbouw per fout
+// 🔥 Galg-opbouw per fout (1-8) + verlies na laatste
 function draw(){
     switch(errors){
-        case 0: document.getElementById("base").style.display="block"; break;         // onderste horizontaal
-        case 1: document.getElementById("pole").style.display="block"; break;         // paal
-        case 2: document.getElementById("beam").style.display="block"; break;         // bovenste balk
-        case 3: document.getElementById("rope").style.display="block"; break;         // touw
-        case 4: document.getElementById("head").style.display="block"; break;         // hoofd
-        case 5: document.getElementById("body").style.display="block"; break;         // lichaam
+        case 0: document.getElementById("base").style.display="block"; break;
+        case 1: document.getElementById("pole").style.display="block"; break;
+        case 2: document.getElementById("beam").style.display="block"; break;
+        case 3: document.getElementById("rope").style.display="block"; break;
+        case 4: document.getElementById("head").style.display="block"; break;
+        case 5: document.getElementById("body").style.display="block"; break;
         case 6: 
             document.getElementById("armL").style.display="block";
-            document.getElementById("armR").style.display="block"; break;            // armen
+            document.getElementById("armR").style.display="block"; break;
         case 7:
             document.getElementById("legL").style.display="block";
             document.getElementById("legR").style.display="block"; 
-            setTimeout(lose,2000); break;                                             // benen + verlies
+            setTimeout(lose,2000); break;
     }
     errors++;
 }
