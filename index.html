@@ -3,267 +3,183 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galgje Deluxe 3.0 🚀</title>
+<title>Galgje Deluxe 4.0 🚀</title>
 <style>
 body {
+    background: radial-gradient(circle at bottom, #02010a, #000822, #00051a);
+    color: white;
     font-family: 'Courier New', monospace;
-    margin:0;
-    background: radial-gradient(ellipse at bottom, #0b0c2a 0%, #070d1a 100%);
-    overflow:hidden;
-    color:white;
+    text-align: center;
+    margin: 0;
+    overflow: hidden;
 }
-.ster {position:absolute;background:white;border-radius:50%;width:2px;height:2px;animation:twinkle 2s infinite alternate;z-index:0;}
-@keyframes twinkle {0%{opacity:0.2}100%{opacity:1}}
-#jupiter {position:absolute; top:10%; right:10%; width:100px; height:100px; background:orange; border-radius:50%; box-shadow:0 0 20px 5px orange; z-index:0;}
-.neon { text-shadow:0 0 5px #0ff,0 0 10px #0ff,0 0 20px #0ff,0 0 40px #0ff; color:#0ff; }
-.container {position:relative; z-index:1; max-width:600px; margin:0 auto; padding-top:30px; text-align:center;}
-#start-screen, #word-entry-screen {display:block;}
-#game-screen {display:none;}
-input, select, button {font-size:16px; padding:8px; margin:5px; border-radius:5px; border:none;}
-button {background:#ff6f61; color:white; cursor:pointer;}
-button:hover {background:#ff3b2f;}
-#galg {position:relative; width:200px; height:250px; margin:20px auto;}
-.galg-part {position:absolute; background:#fff; display:none;}
-.base { bottom:0; left:25px; width:150px; height:10px; } 
-.vert { bottom:10px; left:75px; width:10px; height:200px; } 
-.horiz { top:0px; left:75px; width:100px; height:10px; } /* horizontaal strak op verticaal */
-.rope { top:10px; left:165px; width:2px; height:40px; }
 
-/* Stickman */
-.head { top:50px; left:146px; width:30px; height:30px; border-radius:50%; display:none; }
-.body { top:80px; left:160px; width:2px; height:70px; display:none; }
-.left-arm { top:90px; left:160px; width:40px; height:2px; transform:rotate(-45deg); transform-origin:left center; display:none; }
-.right-arm { top:90px; left:122px; width:40px; height:2px; transform:rotate(45deg); transform-origin:right center; display:none; }
-.left-leg { top:150px; left:160px; width:40px; height:2px; transform:rotate(45deg); transform-origin:left center; display:none; }
-.right-leg { top:150px; left:122px; width:40px; height:2px; transform:rotate(-45deg); transform-origin:right center; display:none; }
+h1 {
+    margin-top: 20px;
+    text-shadow: 0 0 10px #00ffff, 0 0 25px cyan;
+}
 
-#overlay {position:fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.85); display:flex; justify-content:center; align-items:center; font-size:3em; color:#0f0; flex-direction:column; display:none; z-index:10;}
-#overlay.lose {color:red;}
-#overlay button {font-size:0.5em; margin-top:20px; background:#0ff; color:#000;}
-#word-display {font-size:2em; letter-spacing:10px; margin:15px 0;}
-.confetti-piece {position:absolute; width:10px; height:10px; opacity:0.9; z-index:20;}
-#give-up-btn {background:#ff0000; color:white; font-weight:bold; padding:10px 15px; margin:15px; border-radius:5px; cursor:pointer;}
-#give-up-btn:hover {background:#cc0000;}
+button {
+    padding: 10px 15px;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    background: #ff4f4f;
+    color: white;
+    margin-top: 10px;
+}
+button:hover {
+    background: red;
+}
+
+input {
+    font-size: 20px;
+    padding: 6px;
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+
+#overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    background: rgba(0,0,0,0.85);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 4rem;
+}
+
+#give-up-btn {
+    margin-top: 20px;
+    background: #ff0000;
+}
+
+/* GALG — Nieuwe SVG versie */
+#svg-galg-container {
+    width: 250px;
+    margin: 30px auto;
+}
+
+svg line {
+    stroke: #b8860b; /* goudbruin voor hout */
+    stroke-width: 8px;
+}
+
+svg circle, svg path {
+    stroke: white;
+    stroke-width: 6px;
+    fill: none;
+    display: none;
+}
 </style>
 </head>
 <body>
 
-<div id="jupiter"></div>
-
-<div class="container">
+<h1>🔥 Galgje Deluxe 4.0 🔥</h1>
 
 <div id="start-screen">
-    <h1 class="neon">Galgje Deluxe 3.0</h1>
-    <p>Kies je spelmodus:</p>
-    <button onclick="chooseMode('computer')">Tegen de computer</button>
-    <button onclick="chooseMode('2p')">2 personen</button>
+    <p>Kies spelmodus:</p>
+    <button onclick="startGame()">Tegen computer</button>
 </div>
 
-<div id="word-entry-screen" style="display:none;">
-    <h2>Speler 1, voer een woord in:</h2>
-    <input type="text" id="p1-word" maxlength="20">
-    <button onclick="start2PGame()">Start raden</button>
-</div>
+<div id="game-screen" style="display:none;">
 
-<div id="game-screen">
-    <h1 class="neon">Galgje</h1>
-    <div id="galg">
-        <div class="galg-part base"></div>
-        <div class="galg-part vert"></div>
-        <div class="galg-part horiz"></div>
-        <div class="galg-part rope"></div>
-        <div class="head"></div>
-        <div class="body"></div>
-        <div class="left-arm"></div>
-        <div class="right-arm"></div>
-        <div class="left-leg"></div>
-        <div class="right-leg"></div>
+    <!-- 🎯 NIEUWE GALG -->
+    <div id="svg-galg-container">
+        <svg width="250" height="300">
+            <line x1="20" y1="270" x2="200" y2="270" /> <!-- Bodem -->
+            <line x1="60" y1="270" x2="60" y2="50" />  <!-- Paal -->
+            <line x1="60" y1="50" x2="180" y2="50" /> <!-- Balk -->
+            <line x1="180" y1="50" x2="180" y2="90" /> <!-- Touw -->
+
+            <!-- Stickman onderdelen -->
+            <circle id="head" cx="180" cy="115" r="25" /> 
+            <line id="body" x1="180" y1="140" x2="180" y2="200" />
+
+            <line id="armL" x1="180" y1="155" x2="150" y2="180" />
+            <line id="armR" x1="180" y1="155" x2="210" y2="180" />
+
+            <line id="legL" x1="180" y1="200" x2="150" y2="240" />
+            <line id="legR" x1="180" y1="200" x2="210" y2="240" />
+        </svg>
     </div>
 
-    <div id="word-display">_ _ _ _</div>
-    <input type="text" id="letter-input" maxlength="1" autofocus>
-    <button onclick="guessLetter()">Raad</button>
+    <div id="word-display" style="font-size: 2rem; letter-spacing: 12px;"></div>
 
-    <p>Foute letters: <span id="wrong-letters"></span></p>
-    <p>Highscore: <span id="highscore">0</span></p>
+    <input id="letter-input" maxlength="1">
+    <button onclick="guess()">Raad</button>
 
-    <button id="give-up-btn" onclick="giveUp()">IK GEEF OP IK BEN EEN NIKS</button>
+    <p>Fout: <span id="wrong"></span></p>
+
+    <button id="give-up-btn" onclick="lose()">IK GEEF OP IK BEN EEN NIKS</button>
 </div>
 
+<!-- Overlay -->
 <div id="overlay"></div>
 
-</div>
 
 <script>
-// Sterren
-for(let i=0;i<200;i++){
-    let star=document.createElement('div');
-    star.className='ster';
-    star.style.top=Math.random()*100+'%';
-    star.style.left=Math.random()*100+'%';
-    let size=1+Math.random()*3;
-    star.style.width=star.style.height=size+'px';
-    document.body.appendChild(star);
+const words=["CODE","GITHUB","FRIKANDEL","PROGRAMMA","TERSCHELLING"];
+let word="", guessed=[], wrong=[];
+let errors=0;
+
+const parts=["head","body","armL","armR","legL","legR"];
+
+function startGame(){
+    word = words[Math.floor(Math.random()*words.length)];
+    document.getElementById("start-screen").style.display="none";
+    document.getElementById("game-screen").style.display="block";
+    updateDisplay();
+    document.getElementById("letter-input").focus();
 }
 
-// Variabelen
-let words=["GITHUB","WEBSITE","JAVASCRIPT","CODING","PROGRAMMA"];
-let word, guessed=[], wrongLetters=[], mode="computer";
-let head, body, armsAndLegs=[], partsSequence=[];
-let highscore=localStorage.getItem('highscore')||0;
-document.getElementById('highscore').textContent=highscore;
-
-// Functies
-function chooseMode(selected){
-    mode = selected;
-    if(mode==='2p'){ document.getElementById('start-screen').style.display='none'; document.getElementById('word-entry-screen').style.display='block'; }
-    else { startGame(); }
-}
-
-function start2PGame(){
-    word = document.getElementById('p1-word').value.toUpperCase();
-    document.getElementById('p1-word').value='';
-    document.getElementById('word-entry-screen').style.display='none';
-    startGame(false);
-}
-
-function startGame(random=true){
-    if(random) word = words[Math.floor(Math.random()*words.length)];
-    guessed = [];
-    wrongLetters = [];
-
-    // DOM-elementen ophalen
-    head = document.querySelector('.head');
-    body = document.querySelector('.body');
-    armsAndLegs = [
-        document.querySelector('.left-arm'),
-        document.querySelector('.right-arm'),
-        document.querySelector('.left-leg'),
-        document.querySelector('.right-leg')
-    ];
-    partsSequence = [
-        document.querySelector('.galg-part.base'),
-        document.querySelector('.galg-part.vert'),
-        document.querySelector('.galg-part.horiz'),
-        document.querySelector('.galg-part.rope')
-    ];
-
-    // alles verbergen
-    partsSequence.forEach(p => p.style.display='none');
-    head.style.display='none';
-    body.style.display='none';
-    armsAndLegs.forEach(p => p.style.display='none');
-
-    document.getElementById('start-screen').style.display='none';
-    document.getElementById('word-entry-screen').style.display='none';
-    document.getElementById('game-screen').style.display='block';
-
-    updateWordDisplay();
-    document.getElementById('wrong-letters').textContent = '';
-    document.getElementById('overlay').style.display = 'none';
-    document.getElementById('letter-input').focus();
-}
-
-// Enter-toets
-let letterInput = document.getElementById('letter-input');
-letterInput.addEventListener('keydown', function(e){
-    if(e.key === 'Enter'){ 
-        guessLetter();
-    }
+document.getElementById("letter-input").addEventListener("keydown", e=>{
+    if(e.key==="Enter") guess();
 });
 
-function updateWordDisplay(){
-    let display='';
-    for(let c of word){display+=guessed.includes(c)?c+' ':'_ ';}
-    document.getElementById('word-display').textContent=display.trim();
-    if(!display.includes('_')) showResult(true);
+function updateDisplay(){
+    let out="";
+    for(let l of word) out+= guessed.includes(l) ? l+" " : "_ ";
+    document.getElementById("word-display").innerText=out.trim();
+
+    if(!out.includes("_")) win();
 }
 
-function updateGalg(){
-    let len = wrongLetters.length;
-    // eerste 4 fouten: galg-balken + touw
-    for (let i=0;i<Math.min(len,4);i++) partsSequence[i].style.display='block';
+function guess(){
+    const letter=document.getElementById("letter-input").value.toUpperCase();
+    document.getElementById("letter-input").value="";
+    document.getElementById("letter-input").focus();
 
-    if(len===5) head.style.display='block';
-    else if(len===6) body.style.display='block';
-    else if(len===7){
-        armsAndLegs.forEach(p=>p.style.display='block');
-        setTimeout(()=>{ showResult(false); },2000);
-    }
-}
+    if(!letter || guessed.includes(letter) || wrong.includes(letter)) return;
 
-function guessLetter(){
-    let letter = letterInput.value.toUpperCase();
-    letterInput.value = '';
-    letterInput.focus();
-    if(!letter || guessed.includes(letter) || wrongLetters.includes(letter)) return;
     if(word.includes(letter)) guessed.push(letter);
-    else{
-        wrongLetters.push(letter);
-        document.getElementById('wrong-letters').textContent = wrongLetters.join(', ');
-        updateGalg();
+    else {
+        wrong.push(letter);
+        document.getElementById("wrong").innerText=wrong.join(" ");
+        draw();
     }
-    updateWordDisplay();
+
+    updateDisplay();
 }
 
-function showResult(win){
-    let overlay = document.getElementById('overlay');
-    overlay.style.display = 'flex';
-    overlay.className = win?'':'lose';
-    overlay.innerHTML = win?`<span style="font-size:4em">YEEEEEEEAH</span>`:`😂 hahahha LOSER! Het woord was: ${word}`;
-    let btn = document.createElement('button');
-    btn.textContent = 'Opnieuw proberen';
-    btn.onclick = resetGame;
-    overlay.appendChild(btn);
-    if(win){ 
-        highscore++;
-        localStorage.setItem('highscore', highscore);
-        document.getElementById('highscore').textContent = highscore;
-        confettiBoom();
-        stickmanDance();
-    }
+function draw(){
+    document.getElementById(parts[errors]).style.display="block";
+    errors++;
+    if(errors===6) lose();
 }
 
-// Confetti
-function confettiBoom(){
-    for(let i=0;i<150;i++){
-        let c=document.createElement('div');
-        c.className='confetti-piece';
-        c.style.background=`hsl(${Math.random()*360},100%,50%)`;
-        c.style.left=Math.random()*window.innerWidth+'px';
-        c.style.top='0px';
-        document.body.appendChild(c);
-        let speed=2+Math.random()*3;
-        let angle=(Math.random()-0.5)*2;
-        let fall=setInterval(()=>{
-            let top=parseFloat(c.style.top); let left=parseFloat(c.style.left);
-            c.style.top=top+speed+'px'; c.style.left=left+angle*5+'px';
-            if(top>window.innerHeight){c.remove(); clearInterval(fall);}
-        },20);
-    }
+function win(){
+    let o=document.getElementById("overlay");
+    o.innerHTML="YEEEEEEEAAH 🎉<br><button onclick='location.reload()'>Opnieuw</button>";
+    o.style.display="flex";
 }
 
-// Stickman juichen
-function stickmanDance(){
-    document.querySelector('.galg-part.rope').style.display='none';
-    let stickman=[head,body,...armsAndLegs];
-    let left=0; let dir=1;
-    stickman.forEach(s=>s.style.transition='transform 0.1s');
-    let dance=setInterval(()=>{
-        left+=dir*5;
-        stickman.forEach(s=>s.style.transform=`translateX(${left}px)`);
-        if(left>100||left<-100) dir*=-1;
-    },100);
-    setTimeout(()=>{clearInterval(dance); stickman.forEach(s=>s.style.transform='');},4000);
-}
-
-// Geef op
-function giveUp(){ resetGame(); }
-function resetGame(){
-    document.getElementById('start-screen').style.display='block';
-    document.getElementById('game-screen').style.display='none';
-    document.getElementById('word-entry-screen').style.display='none';
-    document.getElementById('overlay').style.display='none';
+function lose(){
+    let o=document.getElementById("overlay");
+    o.innerHTML=`😂 HAHA LOSER<br><small>Het woord was: ${word}</small><br><button onclick='location.reload()'>Opnieuw</button>`;
+    o.style.display="flex";
 }
 </script>
 
