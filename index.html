@@ -1,187 +1,376 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galgje Deluxe 4.0 🚀</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Galgje Deluxe 4.1 — Revert</title>
 <style>
-body {
-    background: radial-gradient(circle at bottom, #02010a, #000822, #00051a);
-    color: white;
-    font-family: 'Courier New', monospace;
-    text-align: center;
-    margin: 0;
-    overflow: hidden;
-}
+  :root{
+    --bg1:#03021a; --bg2:#071033; --accent:#00e6ff; --wood:#a86f2a;
+  }
+  body{
+    margin:0;
+    font-family: "Courier New", monospace;
+    background: radial-gradient(circle at bottom, var(--bg2), var(--bg1));
+    color:#fff;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+  .wrap{max-width:900px;margin:18px auto;padding:12px;text-align:center;}
+  h1{margin:6px 0 12px;font-size:28px;color:var(--accent);text-shadow:0 0 8px rgba(0,230,255,0.15);}
+  .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0;}
+  button{background:#ff6f61;border:none;color:#fff;padding:10px 12px;border-radius:8px;font-size:16px;cursor:pointer;}
+  button:hover{filter:brightness(.95)}
+  input[type="text"]{font-size:16px;padding:8px;border-radius:6px;border:none; text-transform:uppercase}
+  select{font-size:16px;padding:8px;border-radius:6px;border:none;}
+  #game-screen{display:none;margin-top:6px}
+  #word-display{font-size:28px;letter-spacing:12px;margin:12px 0}
+  #wrong-letters{color:#ffb3b3;min-height:22px}
+  #give-up-btn{background:#cc0000;padding:8px 10px}
+  #overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:40;flex-direction:column;color:#0f0;font-size:3rem}
+  #overlay.lose{color:#ff4444}
+  #version{font-size:12px;color:#9aa; margin-top:8px;}
 
-h1 {
-    margin-top: 20px;
-    text-shadow: 0 0 10px #00ffff, 0 0 25px cyan;
-}
+  /* SVG galg area */
+  #svg-wrap{width:300px;margin:8px auto}
+  svg{display:block;margin:0 auto}
+  .wood{stroke:var(--wood); stroke-width:10; stroke-linecap:round;}
+  .rope{stroke:#6b4a2d; stroke-width:4; stroke-linecap:round;}
+  .part{stroke:#fff; stroke-width:6; fill:none; display:none; stroke-linecap:round; stroke-linejoin:round}
+  /* ensure stickman visible */
+  .stick{stroke:#fff; stroke-width:6; stroke-linecap:round; display:none}
+  .confetti-piece{position:fixed;width:10px;height:10px;z-index:60;pointer-events:none;opacity:.95;border-radius:2px}
 
-button {
-    padding: 10px 15px;
-    font-size: 18px;
-    cursor: pointer;
-    border: none;
-    border-radius: 6px;
-    background: #ff4f4f;
-    color: white;
-    margin-top: 10px;
-}
-button:hover {
-    background: red;
-}
-
-input {
-    font-size: 20px;
-    padding: 6px;
-    margin-top: 10px;
-    text-transform: uppercase;
-}
-
-#overlay {
-    position: fixed;
-    inset: 0;
-    display: none;
-    background: rgba(0,0,0,0.85);
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-size: 4rem;
-}
-
-#give-up-btn {
-    margin-top: 20px;
-    background: #ff0000;
-}
-
-/* GALG — Nieuwe SVG versie */
-#svg-galg-container {
-    width: 250px;
-    margin: 30px auto;
-}
-
-svg line {
-    stroke: #b8860b; /* goudbruin voor hout */
-    stroke-width: 8px;
-}
-
-svg circle, svg path {
-    stroke: white;
-    stroke-width: 6px;
-    fill: none;
-    display: none;
-}
+  /* small responsive tweaks */
+  @media (max-width:520px){ #word-display{font-size:22px;letter-spacing:8px} svg{width:240px} }
 </style>
 </head>
 <body>
+  <div class="wrap">
+    <h1>Galgje Deluxe 4.1 — Revert (Win mode)</h1>
 
-<h1>🔥 Galgje Deluxe 4.0 🔥</h1>
+    <!-- start screen -->
+    <div id="start-screen">
+      <p>Kies modus & instellingen</p>
+      <div class="row">
+        <button onclick="chooseMode('computer')">Tegen de computer</button>
+        <button onclick="chooseMode('2p')">2 personen</button>
+      </div>
 
-<div id="start-screen">
-    <p>Kies spelmodus:</p>
-    <button onclick="startGame()">Tegen computer</button>
-</div>
+      <div class="row" style="align-items:center;">
+        <label>
+          Moeilijkheid:
+          <select id="difficulty">
+            <option value="easy">Gemakkelijk</option>
+            <option value="normal" selected>Normaal</option>
+            <option value="hard">Moeilijk</option>
+          </select>
+        </label>
 
-<div id="game-screen" style="display:none;">
+        <label style="margin-left:10px">
+          Gebruikersnaam:
+          <input id="username" type="text" placeholder="Speler" />
+        </label>
+      </div>
 
-    <!-- 🎯 NIEUWE GALG -->
-    <div id="svg-galg-container">
-        <svg width="250" height="300">
-            <line x1="20" y1="270" x2="200" y2="270" /> <!-- Bodem -->
-            <line x1="60" y1="270" x2="60" y2="50" />  <!-- Paal -->
-            <line x1="60" y1="50" x2="180" y2="50" /> <!-- Balk -->
-            <line x1="180" y1="50" x2="180" y2="90" /> <!-- Touw -->
+      <div id="two-player-entry" style="display:none;margin-top:8px;">
+        <p>Speler 1: voer woord (zonder speciale tekens)</p>
+        <input id="p1-word" type="text" maxlength="20" placeholder="woord..." />
+        <div class="row"><button onclick="start2PGame()">Start 2P spel</button></div>
+      </div>
 
-            <!-- Stickman onderdelen -->
-            <circle id="head" cx="180" cy="115" r="25" /> 
-            <line id="body" x1="180" y1="140" x2="180" y2="200" />
+      <div class="row" id="start-row" style="margin-top:8px;">
+        <button onclick="startGame()">Start willekeurig spel</button>
+      </div>
 
-            <line id="armL" x1="180" y1="155" x2="150" y2="180" />
-            <line id="armR" x1="180" y1="155" x2="210" y2="180" />
-
-            <line id="legL" x1="180" y1="200" x2="150" y2="240" />
-            <line id="legR" x1="180" y1="200" x2="210" y2="240" />
-        </svg>
+      <div id="version">Versie 4.1 — revert naar stap-voor-stap galg-opbouw</div>
     </div>
 
-    <div id="word-display" style="font-size: 2rem; letter-spacing: 12px;"></div>
+    <!-- game screen -->
+    <div id="game-screen">
+      <div id="svg-wrap" aria-hidden="true">
+        <!-- SVG galg: elke element is 1 onderdeel (we show/hide sequentially) -->
+        <svg width="320" height="360" viewBox="0 0 320 360">
+          <!-- bodem en paal en balk blijven, we will hide them initially if we want truly nothing.
+               but per "per fout teken één balk", we start with NOTHING visible -->
+          <line id="base" class="wood part" x1="40" y1="320" x2="280" y2="320"/>
+          <line id="pole" class="wood part" x1="80" y1="320" x2="80" y2="40"/>
+          <line id="beam" class="wood part" x1="80" y1="40" x2="220" y2="40"/>
+          <line id="noose" class="rope part" x1="220" y1="40" x2="220" y2="80"/>
 
-    <input id="letter-input" maxlength="1">
-    <button onclick="guess()">Raad</button>
+          <!-- stickman parts (circle/lines) -->
+          <circle id="head" class="stick" cx="220" cy="105" r="20" />
+          <line id="torso" class="stick" x1="220" y1="125" x2="220" y2="185" />
+          <line id="arm-left" class="stick" x1="220" y1="140" x2="190" y2="165" />
+          <line id="arm-right" class="stick" x1="220" y1="140" x2="250" y2="165" />
+          <line id="leg-left" class="stick" x1="220" y1="185" x2="190" y2="225" />
+          <line id="leg-right" class="stick" x1="220" y1="185" x2="250" y2="225" />
+        </svg>
+      </div>
 
-    <p>Fout: <span id="wrong"></span></p>
+      <div id="word-display">_ _ _ _</div>
 
-    <button id="give-up-btn" onclick="lose()">IK GEEF OP IK BEN EEN NIKS</button>
-</div>
+      <div class="row" style="justify-content:center;">
+        <input id="letter-input" type="text" maxlength="1" style="width:70px;text-align:center" autocomplete="off" />
+        <button onclick="guessLetter()">Raad</button>
+      </div>
 
-<!-- Overlay -->
-<div id="overlay"></div>
+      <p>Foute letters: <span id="wrong-letters"></span></p>
+      <p>Highscore: <span id="highscore">0</span></p>
 
+      <div class="row">
+        <button id="give-up-btn" onclick="giveUp()">IK GEEF OP IK BEN EEN NIKS</button>
+      </div>
+    </div>
+
+    <div id="overlay" role="dialog" aria-hidden="true"></div>
+  </div>
 
 <script>
-const words=["CODE","GITHUB","FRIKANDEL","PROGRAMMA","TERSCHELLING"];
-let word="", guessed=[], wrong=[];
-let errors=0;
+/* ====== Versie 4.1 — stap-voor-stap galg ======
+   - partsSequence bepaalt tekenvolgorde
+   - per fout: show next part
+   - Enter toets + focus behouden
+   - 1p / 2p modes
+   - win => grote "YEEEEEEEAH"
+   - lose => laughing + woord
+*/
 
-const parts=["head","body","armL","armR","legL","legR"];
+const WORDS = ["GITHUB","WEBSITE","JAVASCRIPT","CODING","PROGRAMMA","FRIKANDEL","TERSCHELLING"];
+let mode = "computer"; // or '2p'
+let word = "";
+let guessed = [];
+let wrongLetters = [];
+let partsSequence = []; // DOM elements, filled when game starts
+let maxWrong = 0;
+let highscore = Number(localStorage.getItem('galg_highscore')||0);
+document.getElementById('highscore').textContent = highscore;
 
-function startGame(){
-    word = words[Math.floor(Math.random()*words.length)];
-    document.getElementById("start-screen").style.display="none";
-    document.getElementById("game-screen").style.display="block";
-    updateDisplay();
-    document.getElementById("letter-input").focus();
+// DOM refs for parts (will populate in startGame)
+function populateParts(){
+  partsSequence = [
+    document.getElementById('base'),
+    document.getElementById('pole'),
+    document.getElementById('beam'),
+    document.getElementById('noose'),
+    document.getElementById('head'),
+    document.getElementById('torso'),
+    document.getElementById('arm-left'),
+    document.getElementById('arm-right'),
+    document.getElementById('leg-left'),
+    document.getElementById('leg-right')
+  ];
+  maxWrong = partsSequence.length;
 }
 
-document.getElementById("letter-input").addEventListener("keydown", e=>{
-    if(e.key==="Enter") guess();
+// UI flows
+function chooseMode(m){
+  mode = m;
+  document.getElementById('start-screen').style.display = 'none';
+  if(m === '2p'){
+    document.getElementById('two-player-entry').style.display = 'block';
+    // show entry area only (user will press start2PGame)
+  } else {
+    document.getElementById('two-player-entry').style.display = 'none';
+    startGame(true);
+  }
+}
+
+function start2PGame(){
+  const raw = document.getElementById('p1-word').value.trim().toUpperCase();
+  if(!raw || /[^A-Z]/.test(raw)){
+    alert('Voer een geldig woord (A-Z) in, zonder spaties of speciale tekens.');
+    return;
+  }
+  document.getElementById('p1-word').value = "";
+  startGame(false, raw);
+}
+
+function startGame(random=true, forcedWord=""){
+  // set difficulty
+  const diff = document.getElementById('difficulty').value;
+  if(diff === 'easy') { /* allow more mistakes? use same sequence length but can decide later */ }
+  // reset state
+  guessed = [];
+  wrongLetters = [];
+  errors = 0;
+
+  // choose word
+  if(!random) word = forcedWord;
+  else word = WORDS[Math.floor(Math.random()*WORDS.length)];
+
+  // populate parts from DOM now
+  populateParts();
+
+  // hide all parts at start
+  partsSequence.forEach(el => { if(el) el.style.display = 'none'; });
+
+  // show game
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('two-player-entry').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'block';
+  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('wrong-letters').textContent = "";
+  updateWordDisplay();
+  // focus input
+  const li = document.getElementById('letter-input');
+  li.value = "";
+  li.focus();
+}
+
+// enter key handling & keep focus
+document.getElementById('letter-input').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') {
+    e.preventDefault();
+    guessLetter();
+  }
 });
 
-function updateDisplay(){
-    let out="";
-    for(let l of word) out+= guessed.includes(l) ? l+" " : "_ ";
-    document.getElementById("word-display").innerText=out.trim();
-
-    if(!out.includes("_")) win();
+// update display of word
+function updateWordDisplay(){
+  let out = "";
+  for(let ch of word){
+    out += guessed.includes(ch) ? ch + " " : "_ ";
+  }
+  document.getElementById('word-display').innerText = out.trim();
+  if(!out.includes("_")) {
+    showResult(true);
+  }
 }
 
-function guess(){
-    const letter=document.getElementById("letter-input").value.toUpperCase();
-    document.getElementById("letter-input").value="";
-    document.getElementById("letter-input").focus();
+// main guess function; reveal next part on wrong
+let errors = 0;
+function guessLetter(){
+  const el = document.getElementById('letter-input');
+  let letter = (el.value || "").toUpperCase();
+  el.value = "";
+  el.focus();
+  if(!letter || letter.length !== 1 || !/^[A-Z]$/.test(letter)) return;
 
-    if(!letter || guessed.includes(letter) || wrong.includes(letter)) return;
+  if(guessed.includes(letter) || wrongLetters.includes(letter)) return;
 
-    if(word.includes(letter)) guessed.push(letter);
-    else {
-        wrong.push(letter);
-        document.getElementById("wrong").innerText=wrong.join(" ");
-        draw();
-    }
-
-    updateDisplay();
+  if(word.includes(letter)){
+    guessed.push(letter);
+    updateWordDisplay();
+  } else {
+    wrongLetters.push(letter);
+    document.getElementById('wrong-letters').textContent = wrongLetters.join(", ");
+    // draw next part
+    drawNextPart();
+  }
 }
 
-function draw(){
-    document.getElementById(parts[errors]).style.display="block";
+// show next part in partsSequence
+function drawNextPart(){
+  if(partsSequence.length === 0) populateParts();
+  if(errors < partsSequence.length){
+    const el = partsSequence[errors];
+    if(el) el.style.display = 'block';
     errors++;
-    if(errors===6) lose();
+    // If we've just reached the last part, then LOSS.
+    if(errors >= partsSequence.length){
+      // small delay so user sees final part (0.2s)
+      setTimeout(()=> showResult(false), 200);
+    }
+  }
 }
 
-function win(){
-    let o=document.getElementById("overlay");
-    o.innerHTML="YEEEEEEEAAH 🎉<br><button onclick='location.reload()'>Opnieuw</button>";
-    o.style.display="flex";
+// show overlay result
+function showResult(win){
+  const o = document.getElementById('overlay');
+  if(win){
+    o.className = '';
+    o.innerHTML = `<div style="color:#00ffcc;font-size:4rem">YEEEEEEEAH</div>
+                   <div style="font-size:1.2rem;margin-top:10px"><button onclick="onRetry()">Opnieuw proberen</button></div>`;
+    // update highscore
+    highscore++;
+    localStorage.setItem('galg_highscore', String(highscore));
+    document.getElementById('highscore').textContent = highscore;
+    // confetti + dance
+    confettiBurst();
+    stickmanCelebrate();
+  } else {
+    o.className = 'lose';
+    o.innerHTML = `<div>😂 hahahha LOSER!</div>
+                   <div style="font-size:1rem;margin-top:10px">Het woord was: <strong>${word}</strong></div>
+                   <div style="margin-top:12px"><button onclick="onRetry()">Opnieuw proberen</button></div>`;
+  }
+  o.style.display = 'flex';
 }
 
-function lose(){
-    let o=document.getElementById("overlay");
-    o.innerHTML=`😂 HAHA LOSER<br><small>Het woord was: ${word}</small><br><button onclick='location.reload()'>Opnieuw</button>`;
-    o.style.display="flex";
+// reset to start screen without incrementing score
+function onRetry(){
+  // hide overlay
+  document.getElementById('overlay').style.display = 'none';
+  resetToStart();
 }
+
+// give up
+function giveUp(){
+  resetToStart();
+}
+
+// reset to main start UI
+function resetToStart(){
+  // hide game, show start
+  document.getElementById('game-screen').style.display = 'none';
+  document.getElementById('start-screen').style.display = 'block';
+  document.getElementById('two-player-entry').style.display = 'none';
+  // hide parts
+  if(partsSequence.length) partsSequence.forEach(el=>el.style.display='none');
+  errors = 0;
+  wrongLetters = [];
+  guessed = [];
+  document.getElementById('wrong-letters').textContent = "";
+  document.getElementById('word-display').innerText = "";
+}
+
+// small confetti routine (simple)
+function confettiBurst(){
+  const colors = ["#ff4f4f","#ffb84d","#6affc3","#66d0ff","#c78bff"];
+  for(let i=0;i<120;i++){
+    const d = document.createElement('div');
+    d.className = 'confetti-piece';
+    d.style.left = (Math.random()*100) + "vw";
+    d.style.top = "-10vh";
+    d.style.background = colors[Math.floor(Math.random()*colors.length)];
+    d.style.transform = `rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(d);
+    const speed = 2 + Math.random()*4;
+    const drift = (Math.random()-0.5)*30;
+    let t = 0;
+    const intv = setInterval(()=>{
+      t++;
+      d.style.top = (t*speed) + "vh";
+      d.style.left = `calc(${d.style.left} + ${drift * 0.02 * t}px)`;
+      if(t>200){ clearInterval(intv); d.remove(); }
+    },16);
+  }
+}
+
+// stickman celebration (simple translate)
+function stickmanCelebrate(){
+  // pick visible stick parts to animate
+  const animateParts = ['head','torso','arm-left','arm-right','leg-left','leg-right']
+    .map(id => document.getElementById(id)).filter(Boolean);
+  let dir = 1;
+  let x = 0;
+  const interval = setInterval(()=>{
+    x += dir*6;
+    animateParts.forEach(el => el.style.transform = `translateX(${x}px)`);
+    if(Math.abs(x) > 120) dir *= -1;
+  },120);
+  setTimeout(()=>{
+    clearInterval(interval);
+    animateParts.forEach(el => el.style.transform = '');
+  },4000);
+}
+
+/* initialize highscore shown */
+document.getElementById('highscore').textContent = highscore;
+
+/* small helper: start on pressing startGame button (already wired) */
+
 </script>
-
 </body>
 </html>
