@@ -1,36 +1,133 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mijn Website met Spel</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galgje 🎮</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #f9f9f9, #e0eafc);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+    }
+    .game-container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+    }
+    h1 {
+        color: #ff6f61;
+        margin-bottom: 10px;
+    }
+    #word-display {
+        font-size: 2em;
+        letter-spacing: 10px;
+        margin: 20px 0;
+    }
+    #letter-input {
+        padding: 10px;
+        font-size: 18px;
+        width: 50px;
+        text-align: center;
+        border-radius: 5px;
+        border: 2px solid #ff6f61;
+    }
+    button {
+        padding: 10px 15px;
+        font-size: 16px;
+        margin-left: 10px;
+        border-radius: 5px;
+        border: none;
+        background-color: #ff6f61;
+        color: white;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    button:hover {
+        background-color: #ff3b2f;
+    }
+    #hang-message {
+        margin-top: 15px;
+        font-size: 1.1em;
+        min-height: 24px;
+    }
+    #wrong-letters {
+        color: #ff3b2f;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+</style>
 </head>
 <body>
-    <h1>Welkom op mijn website!</h1>
-    <p>Dit is mijn eerste GitHub Pages site.</p>
 
-    <h2>Raad het getal!</h2>
-    <p>Ik denk aan een getal tussen 1 en 100. Raad welk getal het is!</p>
+<div class="game-container">
+    <h1>🎮 Galgje</h1>
+    <p>Raad het woord door letters te typen!</p>
+    <div id="word-display">_ _ _ _ _ _</div>
+    <input type="text" id="letter-input" maxlength="1" autofocus>
+    <button onclick="guessLetter()">Raad</button>
+    <p id="hang-message"></p>
+    <p>Foute letters: <span id="wrong-letters"></span></p>
+    <button onclick="resetGame()" style="margin-top: 15px;">🔄 Nieuw spel</button>
+</div>
 
-    <input type="number" id="guess" placeholder="Typ hier je gok">
-    <button onclick="checkGuess()">Raad!</button>
-    <p id="message"></p>
+<script>
+const words = ["GITHUB", "WEBSITE", "JAVASCRIPT", "CODING", "PROGRAMMA"];
+let word, guessed, wrongLetters, maxWrong;
 
-    <script>
-        const secretNumber = Math.floor(Math.random() * 100) + 1;
+function initGame() {
+    word = words[Math.floor(Math.random() * words.length)].toUpperCase();
+    guessed = [];
+    wrongLetters = [];
+    maxWrong = 6;
+    document.getElementById('hang-message').textContent = '';
+    document.getElementById('wrong-letters').textContent = '';
+    updateWordDisplay();
+}
 
-        function checkGuess() {
-            const guess = Number(document.getElementById('guess').value);
-            const message = document.getElementById('message');
+function updateWordDisplay() {
+    let display = '';
+    for (let char of word) {
+        display += guessed.includes(char) ? char + ' ' : '_ ';
+    }
+    document.getElementById('word-display').textContent = display.trim();
+    if (!display.includes('_')) {
+        document.getElementById('hang-message').textContent = "🏆 Je hebt gewonnen!";
+    }
+}
 
-            if (guess === secretNumber) {
-                message.textContent = `🎉 Goed gedaan! Het getal was ${secretNumber}.`;
-            } else if (guess < secretNumber) {
-                message.textContent = "📈 Te laag, probeer hoger!";
-            } else {
-                message.textContent = "📉 Te hoog, probeer lager!";
-            }
+function guessLetter() {
+    const input = document.getElementById('letter-input');
+    const letter = input.value.toUpperCase();
+    input.value = '';
+    if (!letter || guessed.includes(letter) || wrongLetters.includes(letter)) return;
+
+    if (word.includes(letter)) {
+        guessed.push(letter);
+    } else {
+        wrongLetters.push(letter);
+        document.getElementById('wrong-letters').textContent = wrongLetters.join(', ');
+        if (wrongLetters.length >= maxWrong) {
+            document.getElementById('hang-message').textContent = `💀 Je hebt verloren! Het woord was: ${word}`;
         }
-    </script>
+    }
+    updateWordDisplay();
+}
+
+function resetGame() {
+    initGame();
+}
+
+initGame();
+</script>
+
 </body>
 </html>
