@@ -46,10 +46,10 @@ button:hover {background:#ff3b2f;}
 
 /* Galg onderdelen */
 .galg-part {position:absolute; background:#fff; display:none;}
-.base {bottom:0; left:25px; width:150px; height:10px;}
-.vert {bottom:10px; left:25px; width:10px; height:200px;}
-.horiz {top:0; left:25px; width:100px; height:10px;}
-.rope {top:10px; left:115px; width:2px; height:40px;}
+.base {bottom:0; left:25px; width:150px; height:10px;} /* basis op vloer */
+.vert {bottom:10px; left:75px; width:10px; height:200px;} /* verticale steun exact onder horizontale balk */
+.horiz {top:0; left:75px; width:100px; height:10px;} /* horizontale balk begint bij verticale steun */
+.rope {top:10px; left:165px; width:2px; height:40px;} /* touw aan het einde van horizontale balk */
 
 /* Stickman */
 .head, .body, .left-arm, .right-arm, .left-leg, .right-leg {position:absolute; background:#fff; display:none;}
@@ -188,7 +188,8 @@ function updateWordDisplay(){
 function updateGalg(){
     if(wrongLetters.length>partsSequence.length)return;
     partsSequence[wrongLetters.length-1].style.display='block';
-    if(wrongLetters.length>=maxWrong) showResult(false);
+    // Controle: verlies pas bij laatste onderdeel (rechtervoet)
+    if(partsSequence[wrongLetters.length-1].classList.contains('right-leg')) showResult(false);
 }
 
 function guessLetter(){
