@@ -6,132 +6,126 @@
 <title>Galgje Deluxe 4.3 – Top 100 woorden</title>
 
 <style>
-    body {
-        background: radial-gradient(circle at bottom, #02010a, #000822, #00051a);
-        color: white;
-        font-family: 'Courier New', monospace;
-        text-align: center;
-        margin: 0;
-        overflow-x: hidden;
-    }
+body {
+    background: radial-gradient(circle at bottom, #02010a, #000822, #00051a);
+    color: white;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+    margin: 0;
+    overflow-x: hidden;
+}
 
-    h1 {
-        margin-top: 20px;
-        font-size: 3rem;
-        text-shadow: 0 0 15px cyan, 0 0 25px #00ffe1;
-    }
+h1 {
+    margin-top: 20px;
+    font-size: 3rem;
+    text-shadow: 0 0 15px cyan, 0 0 25px #00ffe1;
+}
 
-    .screen { display: none; }
+.screen { display: none; }
 
-    #start-screen { display: block; margin-top: 50px; }
+#start-screen { display: block; margin-top: 50px; }
 
-    .panel {
-        background: rgba(255,255,255,0.06);
-        padding: 20px;
-        margin: 25px auto;
-        width: 85%;
-        max-width: 450px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px #007bff55;
-    }
+.panel {
+    background: rgba(255,255,255,0.06);
+    padding: 20px;
+    margin: 25px auto;
+    width: 85%;
+    max-width: 450px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #007bff55;
+}
 
-    label { display: block; margin-top: 12px; font-size: 1.1rem; }
+label { display: block; margin-top: 12px; font-size: 1.1rem; }
 
-    input, select {
-        margin-top: 6px;
-        padding: 8px;
-        width: 90%;
-        font-size: 1.2rem;
-        border-radius: 6px;
-        border: none;
-        text-align: center;
-        text-transform: uppercase;
-    }
+input, select {
+    margin-top: 6px;
+    padding: 8px;
+    width: 90%;
+    font-size: 1.2rem;
+    border-radius: 6px;
+    border: none;
+    text-align: center;
+    text-transform: uppercase;
+}
 
-    button {
-        margin-top: 15px;
-        padding: 10px 20px;
-        font-size: 1.2rem;
-        cursor: pointer;
-        border: none;
-        border-radius: 8px;
-        transition: 0.2s;
-        background: #ff0059;
-        color: white;
-    }
+button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    transition: 0.2s;
+    background: #ff0059;
+    color: white;
+}
 
-    button:hover { transform: scale(1.07); }
+button:hover { transform: scale(1.07); }
 
-    .smallbtn {
-        width: auto;
-        padding: 5px 9px;
-        font-size: 0.9rem;
-        margin-left: 5px;
-        background: #00c2ff;
-    }
+.smallbtn {
+    width: auto;
+    padding: 5px 9px;
+    font-size: 0.9rem;
+    margin-left: 5px;
+    background: #00c2ff;
+}
 
-    #hud {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px 25px;
-        font-size: 1.2rem;
-        text-shadow: 0 0 5px cyan;
-    }
+#hud {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 25px;
+    font-size: 1.2rem;
+    text-shadow: 0 0 5px cyan;
+}
 
-    /* GALG */
-    #galg {
-        width: 200px;
-        margin: 20px auto;
-        position: relative;
-        height: 300px;
-    }
+/* GALG */
+#galg {
+    width: 200px;
+    margin: 20px auto;
+    position: relative;
+    height: 300px;
+}
 
-    .line {
-        position: absolute;
-        background: #c79b43;
-        display: none;
-    }
+.line, .stick {
+    position: absolute;
+    display: none;
+}
 
-    #base { width: 180px; height: 10px; bottom: 0; left: 10px; }
-    #pole { width: 10px; height: 220px; bottom: 0; left: 50px; display: block; }
-    #beam { width: 120px; height: 10px; top: 0; left: 50px; display: block; }
-    #rope { width: 5px; height: 35px; top: 10px; left: 165px; display: block; }
+.line { background: #c79b43; }
+.stick { background: white; }
 
-    .stick { position: absolute; background: white; display: none; }
+#base { width: 180px; height: 10px; bottom: 0; left: 10px; }
+#pole { width: 10px; height: 220px; bottom: 0; left: 50px; }
+#beam { width: 120px; height: 10px; top: 0; left: 50px; }
+#rope { width: 5px; height: 35px; top: 10px; left: 165px; }
 
-    #head { width: 40px; height: 40px; border-radius: 50%; border: 4px solid white; left: 145px; top: 45px; background: none; }
-    #body { width: 4px; height: 80px; left: 164px; top: 85px; }
-    #armL { width: 50px; height: 4px; left: 118px; top: 105px; transform: rotate(-25deg); }
-    #armR { width: 50px; height: 4px; left: 165px; top: 105px; transform: rotate(25deg); }
-    #legL { width: 50px; height: 4px; left: 118px; top: 155px; transform: rotate(25deg); }
-    #legR { width: 50px; height: 4px; left: 165px; top: 155px; transform: rotate(-25deg); }
+#head { width: 40px; height: 40px; border-radius: 50%; border: 4px solid white; left: 145px; top: 45px; background: none; }
+#body { width: 4px; height: 80px; left: 164px; top: 85px; }
+#armL { width: 50px; height: 4px; left: 118px; top: 105px; transform: rotate(-25deg); }
+#armR { width: 50px; height: 4px; left: 165px; top: 105px; transform: rotate(25deg); }
+#legL { width: 50px; height: 4px; left: 118px; top: 155px; transform: rotate(25deg); }
+#legR { width: 50px; height: 4px; left: 165px; top: 155px; transform: rotate(-25deg); }
 
-    #word-display {
-        font-size: 2rem;
-        letter-spacing: 12px;
-        margin-top: 20px;
-    }
+#word-display {
+    font-size: 2rem;
+    letter-spacing: 12px;
+    margin-top: 20px;
+}
 
-    #input-area {
-        margin-top: 20px;
-    }
+#input-area {
+    margin-top: 20px;
+}
 
-    #message {
-        font-size: 2rem;
-        margin-top: 25px;
-    }
-
-    #overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.85);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        font-size: 3rem;
-    }
-
+#overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 3rem;
+}
 </style>
 </head>
 <body>
@@ -142,7 +136,6 @@
 
     <div class="panel">
         <h2>🎮 Tegen de Computer</h2>
-
         <label>Naam:</label>
         <input id="cpuName" placeholder="Jouw naam">
         <button class="smallbtn" onclick="randomName('cpuName')">🎲 Random naam</button>
@@ -159,7 +152,6 @@
 
     <div class="panel">
         <h2>👥 2 Spelers</h2>
-
         <label>Speler 1 naam:</label>
         <input id="p1" placeholder="Naam speler 1">
         <button class="smallbtn" onclick="randomName('p1')">🎲</button>
@@ -175,9 +167,7 @@
     </div>
 </div>
 
-
 <div id="game-screen" class="screen">
-
     <div id="hud">
         <div id="playerLeft"></div>
         <div id="playerRight"></div>
@@ -207,14 +197,11 @@
     <button onclick="giveUp()" style="margin-top:20px; background:red;">IK GEEF OP IK BEN EEN NIKS</button>
 </div>
 
-
 <div id="overlay"></div>
 
-
 <script>
-// ✅ Galgje Deluxe 4.3 Top 100 woorden edition
+// ✅ Galgje Deluxe 4.3 Top 100 woorden met correcte galg-opbouw
 const randomNames = ["🔥 Turbo Toeter", "🤣 Domme Dolfijn", "🍟 Frikandel Koning", "💀 Pepernoot Ninja", "🦍 Alpha Mug", "🎯 Aimloos Kind", "🚽 WC Legende", "🦧 Natte Gorilla"];
-// 100 meestgebruikte Nederlandse woorden (enkele gevarieerd)
 const words = ["DE","EN","VAN","IK","TE","DAT","DIE","IN","HET","WIJ","JE","ZE","MET","OP","NIEUWE","VOOR","ALS","NA","IS","MAAR","OOK","WAT","ZO","DOOR","BIJ","HUN","HELE","AL","OVER","WORDEN","DOEN","KUNNEN","HEN","ONDER","GEEN","TOT","MEER","MEE","MIJN","JOUW","ZIJN","HIER","DAAR","TOCH","GEWEEST","ALTIJD","VANAF","ONZE","JOU","U","DANK","TUSSEN","TIJD","KAN","MOET","NOG","HETZELFDE","ANDERE","OOK","ALLE","GROTE","KLEINE","NOGAL","SOMMIGE","ALLES","NOG","VANDAAG","MORGEN","GISTEREN","OVERAL","SLECHTS","SPEL","KINDEREN","MENSEN","GOED","NOG","ZELF","DAARNA","BEGON","GEKOMEN","GELOPEN","GEVONDEN","GESPROKEN","GEZEGD","GEKEND","GELEERD","GESTART","GEKREGEN","GEZAGEN","GEHOORD","GEMAAKT","GEDAAN","GEKOMEN"];
 
 let word="", guessed=[], wrong=[], errors=0;
@@ -271,13 +258,24 @@ function guess(){
     if(!document.getElementById("word-display").innerText.includes("_")) win();
 }
 
+// 🔥 Galg-opbouw per fout
 function draw(){
-    const parts=["head","body","armL","armR","legL","legR"];
-    if(errors < parts.length){
-        document.getElementById(parts[errors]).style.display="block";
+    switch(errors){
+        case 0: document.getElementById("base").style.display="block"; break;         // onderste horizontaal
+        case 1: document.getElementById("pole").style.display="block"; break;         // paal
+        case 2: document.getElementById("beam").style.display="block"; break;         // bovenste balk
+        case 3: document.getElementById("rope").style.display="block"; break;         // touw
+        case 4: document.getElementById("head").style.display="block"; break;         // hoofd
+        case 5: document.getElementById("body").style.display="block"; break;         // lichaam
+        case 6: 
+            document.getElementById("armL").style.display="block";
+            document.getElementById("armR").style.display="block"; break;            // armen
+        case 7:
+            document.getElementById("legL").style.display="block";
+            document.getElementById("legR").style.display="block"; 
+            setTimeout(lose,2000); break;                                             // benen + verlies
     }
     errors++;
-    if(errors===parts.length) lose();
 }
 
 function win(){
