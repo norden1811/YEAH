@@ -105,7 +105,7 @@ for(let i=0;i<200;i++){
 
 // Variabelen
 let words=["GITHUB","WEBSITE","JAVASCRIPT","CODING","PROGRAMMA"];
-let word, guessed=[], wrongLetters=[], maxWrong=7, mode="computer";
+let word, guessed=[], wrongLetters=[], mode="computer";
 let head, body, armsAndLegs=[], partsSequence=[];
 let highscore=localStorage.getItem('highscore')||0;
 document.getElementById('highscore').textContent=highscore;
@@ -129,7 +129,7 @@ function startGame(random=true){
     guessed = [];
     wrongLetters = [];
 
-    // DOM-elementen ophalen
+    // DOM-elementen ophalen nu game zichtbaar
     head = document.querySelector('.head');
     body = document.querySelector('.body');
     armsAndLegs = [
@@ -145,10 +145,9 @@ function startGame(random=true){
         document.querySelector('.galg-part.rope')
     ];
 
-    // alles verbergen
     partsSequence.forEach(p => p.style.display='none');
-    head.style.display = 'none';
-    body.style.display = 'none';
+    head.style.display='none';
+    body.style.display='none';
     armsAndLegs.forEach(p => p.style.display='none');
 
     document.getElementById('start-screen').style.display='none';
@@ -161,7 +160,7 @@ function startGame(random=true){
     document.getElementById('letter-input').focus();
 }
 
-// Enter-toets functie
+// Enter-toets
 let letterInput = document.getElementById('letter-input');
 letterInput.addEventListener('keydown', function(e){
     if(e.key === 'Enter'){ 
@@ -178,10 +177,14 @@ function updateWordDisplay(){
 
 function updateGalg(){
     let len = wrongLetters.length;
-    if(len<=4){ partsSequence[len-1].style.display='block'; }
-    else if(len===5){ head.style.display='block'; }
-    else if(len===6){ body.style.display='block'; }
-    else if(len===7){ armsAndLegs.forEach(p=>p.style.display='block'); setTimeout(()=>{ showResult(false); },2000); }
+    // eerste 4 fouten: galg-balken + touw
+    for (let i=0; i<Math.min(len,4); i++) partsSequence[i].style.display='block';
+    if(len===5) head.style.display='block';
+    else if(len===6) body.style.display='block';
+    else if(len===7){
+        armsAndLegs.forEach(p=>p.style.display='block');
+        setTimeout(()=>{ showResult(false); },2000);
+    }
 }
 
 function guessLetter(){
