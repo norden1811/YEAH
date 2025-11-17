@@ -26,7 +26,7 @@ button:hover {background:#ff3b2f;}
 .galg-part {position:absolute; background:#fff; display:none;}
 .base {bottom:0; left:25px; width:150px; height:10px;} 
 .vert {bottom:10px; left:75px; width:10px; height:200px;} 
-.horiz {top:30px; left:75px; width:100px; height:10px;} /* lager gezet */
+.horiz {top:30px; left:75px; width:100px; height:10px;} /* horizontaal lager gezet */
 .rope {top:40px; left:165px; width:2px; height:40px;} 
 .head {top:80px; left:100px; width:30px; height:30px; border-radius:50%; display:none;}
 .body {top:110px; left:114px; width:2px; height:70px; display:none;}
@@ -109,11 +109,21 @@ for(let i=0;i<200;i++){
 
 // Variabelen
 let words=["GITHUB","WEBSITE","JAVASCRIPT","CODING","PROGRAMMA"];
-let word, guessed, wrongLetters=[], maxWrong=7, username, theme, mode="computer";
-let partsSequence;
+let word, guessed=[], wrongLetters=[], maxWrong=7, username, theme, mode="computer";
 let highscore=localStorage.getItem('highscore')||0;
 document.getElementById('highscore').textContent=highscore;
 
+// Stickman onderdelen
+let head = document.querySelector('.head');
+let body = document.querySelector('.body');
+let armsAndLegs = [
+    document.querySelector('.left-arm'),
+    document.querySelector('.right-arm'),
+    document.querySelector('.left-leg'),
+    document.querySelector('.right-leg')
+];
+
+// Functies
 function chooseMode(selected){
     mode = selected;
     if(mode==='2p'){ document.getElementById('start-screen').style.display='none'; document.getElementById('word-entry-screen').style.display='block'; }
@@ -130,16 +140,10 @@ function start2PGame(){
 function startGame(random=true){
     if(random) word=words[Math.floor(Math.random()*words.length)];
     guessed=[]; wrongLetters=[];
-    partsSequence=[
-        document.querySelector('.galg-part.base'),
-        document.querySelector('.galg-part.vert'),
-        document.querySelector('.galg-part.horiz'),
-        document.querySelector('.galg-part.rope')
-    ];
-    partsSequence.forEach(p=>p.style.display='none');
     head.style.display='none';
     body.style.display='none';
     armsAndLegs.forEach(p=>p.style.display='none');
+    partsSequence.forEach(p=>p.style.display='none');
     document.getElementById('start-screen').style.display='none';
     document.getElementById('game-screen').style.display='block';
     updateWordDisplay();
@@ -147,14 +151,12 @@ function startGame(random=true){
     document.getElementById('overlay').style.display='none';
 }
 
-// Stickman onderdelen
-let head = document.querySelector('.head');
-let body = document.querySelector('.body');
-let armsAndLegs = [
-    document.querySelector('.left-arm'),
-    document.querySelector('.right-arm'),
-    document.querySelector('.left-leg'),
-    document.querySelector('.right-leg')
+// Galg onderdelen
+let partsSequence = [
+    document.querySelector('.galg-part.base'),
+    document.querySelector('.galg-part.vert'),
+    document.querySelector('.galg-part.horiz'),
+    document.querySelector('.galg-part.rope')
 ];
 
 function updateWordDisplay(){
@@ -166,22 +168,16 @@ function updateWordDisplay(){
 
 function updateGalg(){
     let len = wrongLetters.length;
-    if(len<=4){
-        partsSequence[len-1].style.display='block';
-    } else if(len===5){
-        head.style.display='block';
-    } else if(len===6){
-        body.style.display='block';
-    } else if(len===7){
-        armsAndLegs.forEach(p=>p.style.display='block');
-        setTimeout(()=>{ showResult(false); }, 2000);
-    }
+    if(len<=4){ partsSequence[len-1].style.display='block'; }
+    else if(len===5){ head.style.display='block'; }
+    else if(len===6){ body.style.display='block'; }
+    else if(len===7){ armsAndLegs.forEach(p=>p.style.display='block'); setTimeout(()=>{ showResult(false); },2000); }
 }
 
 function guessLetter(){
     let input=document.getElementById('letter-input');
     let letter=input.value.toUpperCase(); input.value='';
-    if(!letter||guessed.includes(letter)||wrongLetters.includes(letter))return;
+    if(!letter||guessed.includes(letter)||wrongLetters.includes(letter)) return;
     if(word.includes(letter)) guessed.push(letter);
     else{ wrongLetters.push(letter); document.getElementById('wrong-letters').textContent=wrongLetters.join(', '); updateGalg();}
     updateWordDisplay();
@@ -221,7 +217,7 @@ function confettiBoom(){
 // Stickman juichen
 function stickmanDance(){
     document.querySelector('.galg-part.rope').style.display='none';
-    let stickman=[head, body,...armsAndLegs];
+    let stickman=[head,body,...armsAndLegs];
     let left=0; let dir=1;
     stickman.forEach(s=>s.style.transition='transform 0.1s');
     let dance=setInterval(()=>{
