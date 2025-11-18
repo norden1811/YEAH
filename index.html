@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Galgje Deluxe 5.0 – Retro</title>
+<title>Galgje Deluxe 5.1 – Retro Edition</title>
 
 <style>
 /* ===== ALGEMEEN ===== */
@@ -16,14 +16,15 @@ body {
 }
 
 h1 {
-    margin: 20px 0 10px;
+    margin: 20px 0 0;
     font-size: 2.6rem;
     letter-spacing: 3px;
 }
 
-.small-sub {
-    font-size: 0.8rem;
-    color: #b0b0a5;
+.version {
+    font-size: 0.9rem;
+    color: #bbbbaa;
+    margin-bottom: 20px;
 }
 
 .screen { display: none; }
@@ -88,8 +89,6 @@ button:hover {
 }
 
 /* HUD */
-#game-screen { margin-top: 10px; }
-
 #hud {
     display: flex;
     justify-content: space-between;
@@ -97,111 +96,111 @@ button:hover {
     font-size: 0.95rem;
 }
 
-/* GALG + POPPETJE */
+/* ===== GALG PERFECT UITGELIJND ===== */
 #galg {
-    width: 220px;
-    height: 260px;
+    width: 240px;
+    height: 280px;
     margin: 20px auto 10px;
     position: relative;
 }
 
 .part {
     position: absolute;
-    display: none; /* BELANGRIJK: ALLES START ONZICHTBAAR */
+    display: none;
 }
 
-/* houten balken */
 .line {
     background: #b3844a;
 }
 
-/* basis */
+/* BASIS */
 #base {
-    left: 20px;
     bottom: 0;
+    left: 20px;
     width: 180px;
     height: 10px;
 }
 
-/* paal omhoog */
+/* PAAL */
 #pole {
-    left: 60px;
     bottom: 10px;
+    left: 60px;
     width: 10px;
-    height: 190px;
+    height: 200px;
 }
 
-/* bovenbalk */
+/* BOVENBALK */
 #beam {
     left: 60px;
-    top: 10px;
-    width: 110px;
+    top: 20px; /* perfect aansluitend */
+    width: 120px;
     height: 10px;
 }
 
-/* touw */
+/* TOUW */
 #rope {
     left: 165px;
-    top: 20px;
+    top: 30px;
     width: 4px;
     height: 35px;
     background: #d4c29a;
 }
 
-/* hoofd */
+/* HOOFD */
 #head {
     left: 145px;
-    top: 48px;
+    top: 65px;
     width: 40px;
     height: 40px;
     border-radius: 50%;
     border: 4px solid #f4f4e6;
-    background: transparent;
 }
 
-/* lichaam + ledematen zijn “stokken” */
-.stick {
+/* LICHAAM */
+#body {
+    left: 164px;
+    top: 105px;
+    width: 4px;
+    height: 70px;
     background: #f4f4e6;
 }
 
-/* lichaam */
-#body {
-    left: 164px;
-    top: 88px;
-    width: 4px;
-    height: 70px;
-}
-
-/* armen */
+/* ARMEN */
 #armL {
     left: 124px;
-    top: 105px;
+    top: 118px;
     width: 45px;
     height: 4px;
+    background: #f4f4e6;
     transform: rotate(-25deg);
 }
+
 #armR {
     left: 168px;
-    top: 105px;
+    top: 118px;
     width: 45px;
     height: 4px;
+    background: #f4f4e6;
     transform: rotate(25deg);
 }
 
-/* benen */
+/* BENEN (Naar beneden hangend) */
 #legL {
-    left: 126px;
-    top: 150px;
+    left: 140px;
+    top: 170px;
     width: 45px;
     height: 4px;
-    transform: rotate(25deg);
+    background: #f4f4e6;
+    transform: rotate(65deg);
 }
+
 #legR {
-    left: 168px;
-    top: 150px;
+    left: 165px;
+    top: 170px;
     width: 45px;
     height: 4px;
-    transform: rotate(-25deg);
+    background: #f4f4e6;
+    transform: rotate(-65deg);
 }
 
 /* woord & input */
@@ -210,10 +209,12 @@ button:hover {
     letter-spacing: 10px;
     margin-top: 10px;
 }
+
 #wrong {
     min-height: 20px;
     font-size: 0.9rem;
 }
+
 #input-area { margin-top: 12px; }
 
 #giveup-btn {
@@ -237,7 +238,6 @@ button:hover {
     margin-top: 12px;
 }
 
-/* responsive */
 @media (max-width: 520px){
     #word-display { font-size: 1.4rem; letter-spacing: 6px; }
 }
@@ -245,50 +245,50 @@ button:hover {
 </head>
 <body>
 
-<h1>GALGJE DELUXE 5.0</h1>
-<div class="small-sub">Retro Editie – opgebouwd vanaf nul</div>
+<h1>GALGJE DELUXE</h1>
+<div class="version">v5.1 – Retro Edition</div>
 
 <!-- STARTSCHERM -->
 <div id="start-screen" class="screen">
 
-  <div class="panel">
-    <h2>🎮 Tegen de computer</h2>
-    <label>Jouw naam:</label>
-    <div style="display:flex;align-items:center;gap:4px;">
-      <input id="cpuName" placeholder="Naam speler" />
-      <button class="smallbtn" type="button" onclick="randomName('cpuName')">🎲</button>
+    <div class="panel">
+        <h2>🎮 Tegen de computer</h2>
+        <label>Jouw naam:</label>
+        <div style="display:flex;align-items:center;gap:4px;">
+            <input id="cpuName" placeholder="Naam speler" />
+            <button class="smallbtn" type="button" onclick="randomName('cpuName')">🎲</button>
+        </div>
+
+        <label>Moeilijkheid:</label>
+        <select id="difficulty">
+            <option value="easy">Makkelijk</option>
+            <option value="normal" selected>Normaal</option>
+            <option value="hard">Moeilijk</option>
+        </select>
+
+        <button type="button" onclick="startCPU()">Start spel</button>
     </div>
 
-    <label>Moeilijkheid:</label>
-    <select id="difficulty">
-      <option value="easy">Makkelijk</option>
-      <option value="normal" selected>Normaal</option>
-      <option value="hard">Moeilijk</option>
-    </select>
+    <div class="panel">
+        <h2>👥 Twee spelers</h2>
 
-    <button type="button" onclick="startCPU()">Start spel</button>
-  </div>
+        <label>Speler 1:</label>
+        <div style="display:flex;align-items:center;gap:4px;">
+            <input id="p1" placeholder="Naam speler 1" />
+            <button class="smallbtn" onclick="randomName('p1')">🎲</button>
+        </div>
 
-  <div class="panel">
-    <h2>👥 Twee spelers (secret word)</h2>
+        <label>Speler 2:</label>
+        <div style="display:flex;align-items:center;gap:4px;">
+            <input id="p2" placeholder="Naam speler 2" />
+            <button class="smallbtn" onclick="randomName('p2')">🎲</button>
+        </div>
 
-    <label>Speler 1 (woord bedenker):</label>
-    <div style="display:flex;align-items:center;gap:4px;">
-      <input id="p1" placeholder="Naam speler 1" />
-      <button class="smallbtn" type="button" onclick="randomName('p1')">🎲</button>
+        <label>Geheim woord:</label>
+        <input id="secretWord" type="password" placeholder="•••••••" />
+
+        <button type="button" onclick="start2P()">Start spel</button>
     </div>
-
-    <label>Speler 2 (raden):</label>
-    <div style="display:flex;align-items:center;gap:4px;">
-      <input id="p2" placeholder="Naam speler 2" />
-      <button class="smallbtn" type="button" onclick="randomName('p2')">🎲</button>
-    </div>
-
-    <label>Geheim woord:</label>
-    <input id="secretWord" type="password" placeholder="•••••••" />
-
-    <button type="button" onclick="start2P()">Start spel</button>
-  </div>
 
 </div>
 
@@ -301,16 +301,16 @@ button:hover {
   </div>
 
   <div id="galg">
-    <div id="base"  class="part line"></div>
-    <div id="pole"  class="part line"></div>
-    <div id="beam"  class="part line"></div>
-    <div id="rope"  class="part"></div>
-    <div id="head"  class="part"></div>
-    <div id="body"  class="part stick"></div>
-    <div id="armL"  class="part stick"></div>
-    <div id="armR"  class="part stick"></div>
-    <div id="legL"  class="part stick"></div>
-    <div id="legR"  class="part stick"></div>
+    <div id="base" class="part line"></div>
+    <div id="pole" class="part line"></div>
+    <div id="beam" class="part line"></div>
+    <div id="rope" class="part"></div>
+    <div id="head" class="part"></div>
+    <div id="body" class="part"></div>
+    <div id="armL" class="part"></div>
+    <div id="armR" class="part"></div>
+    <div id="legL" class="part"></div>
+    <div id="legR" class="part"></div>
   </div>
 
   <div id="word-display"></div>
@@ -318,10 +318,10 @@ button:hover {
 
   <div id="input-area">
     <input id="letter" maxlength="1" autocomplete="off" />
-    <button type="button" onclick="guess()">Raad</button>
+    <button onclick="guess()">Raad</button>
   </div>
 
-  <button id="giveup-btn" type="button" onclick="giveUp()">IK GEEF OP IK BEN EEN NIKS</button>
+  <button id="giveup-btn" onclick="giveUp()">IK GEEF OP IK BEN EEN NIKS</button>
 </div>
 
 <div id="overlay"></div>
@@ -329,19 +329,22 @@ button:hover {
 <script>
 /* ===== DATA ===== */
 const randomNames = [
-  "🔥 Turbo Toeter","🤣 Domme Dolfijn","🍟 Frikandel Koning","💀 Pepernoot Ninja",
-  "🦍 Alpha Mug","🎯 Aimloos Kind","🚽 WC Legende","🦧 Natte Gorilla"
+"🔥 Turbo Toeter","🤣 Domme Dolfijn","🍟 Frikandel Koning",
+"💀 Pepernoot Ninja","🦍 Alpha Mug","🎯 Aimloos Kind",
+"🚽 WC Legende","🦧 Natte Gorilla"
 ];
 
 const words = [
-  "DE","EN","VAN","IK","TE","DAT","DIE","IN","HET","WIJ","JE","ZE","MET","OP","NIEUWE","VOOR",
-  "ALS","NA","IS","MAAR","OOK","WAT","ZO","DOOR","BIJ","HUN","HELE","AL","OVER","WORDEN","DOEN",
-  "KUNNEN","HEN","ONDER","GEEN","TOT","MEER","MEE","MIJN","JOUW","ZIJN","HIER","DAAR","TOCH",
-  "GEWEEST","ALTIJD","VANAF","ONZE","JOU","U","DANK","TUSSEN","TIJD","KAN","MOET","NOG",
-  "HETZELFDE","ANDERE","ALLE","GROTE","KLEINE","SOMMIGE","ALLES","VANDAAG","MORGEN","GISTEREN",
-  "OVERAL","SLECHTS","SPEL","KINDEREN","MENSEN","GOED","ZELF","DAARNA","BEGON","GEKOMEN",
-  "GELOPEN","GEVONDEN","GESPROKEN","GEZEGD","GEKEND","GELEERD","GESTART","GEKREGEN","GEZAGEN",
-  "GEHOORD","GEMAAKT","GEDAAN"
+"DE","EN","VAN","IK","TE","DAT","DIE","IN","HET","WIJ","JE","ZE","MET",
+"OP","NIEUWE","VOOR","ALS","NA","IS","MAAR","OOK","WAT","ZO","DOOR",
+"BIJ","HUN","HELE","AL","OVER","WORDEN","DOEN","KUNNEN","HEN","ONDER",
+"GEEN","TOT","MEER","MEE","MIJN","JOUW","ZIJN","HIER","DAAR","TOCH",
+"GEWEEST","ALTIJD","VANAF","ONZE","JOU","U","DANK","TUSSEN","TIJD",
+"KAN","MOET","NOG","ANDERE","ALLE","GROTE","KLEINE","SOMMIGE",
+"ALLES","VANDAAG","MORGEN","GISTEREN","OVERAL","SPEL","KINDEREN",
+"MENSEN","GOED","ZELF","DAARNA","BEGON","GEKOMEN","GELOPEN",
+"GEVONDEN","GESPROKEN","GEZEGD","GELEERD","GESTART","GEKREGEN",
+"GEHOORD","GEMAAKT","GEDAAN"
 ];
 
 /* ===== STATE ===== */
@@ -351,147 +354,130 @@ let wrong = [];
 let errors = 0;
 let player1 = "";
 let player2 = "";
-let mode = "cpu"; // 'cpu' of '2p'
+let mode = "";
 
-/* ===== HELPERS ===== */
+/* HELPER */
 function randomName(id){
-  document.getElementById(id).value = randomNames[Math.floor(Math.random()*randomNames.length)];
+    document.getElementById(id).value =
+        randomNames[Math.floor(Math.random()*randomNames.length)];
 }
 
-function showScreen(idToShow){
-  document.getElementById("start-screen").style.display = (idToShow === "start") ? "block" : "none";
-  document.getElementById("game-screen").style.display  = (idToShow === "game")  ? "block" : "none";
-}
-
-/* ===== START MODES ===== */
+/* START CPU */
 function startCPU(){
-  mode = "cpu";
-  player1 = document.getElementById("cpuName").value || randomNames[Math.floor(Math.random()*randomNames.length)];
-  player2 = "🤖 COMPUTER";
-  word    = words[Math.floor(Math.random()*words.length)];
-  beginGame();
+    mode = "cpu";
+    player1 = document.getElementById("cpuName").value || randomNames[Math.floor(Math.random()*randomNames.length)];
+    player2 = "🤖 COMPUTER";
+    word    = words[Math.floor(Math.random()*words.length)];
+    startGame();
 }
 
+/* START 2P */
 function start2P(){
-  mode = "2p";
-  player1 = document.getElementById("p1").value || randomNames[Math.floor(Math.random()*randomNames.length)];
-  player2 = document.getElementById("p2").value || randomNames[Math.floor(Math.random()*randomNames.length)];
-  const w = document.getElementById("secretWord").value.trim().toUpperCase();
-  if(!w || /[^A-Z]/.test(w)){
-    alert("Voer een geldig geheim woord (A–Z) in.");
-    return;
-  }
-  word = w;
-  beginGame();
+    mode = "2p";
+    player1 = document.getElementById("p1").value || randomNames[Math.floor(Math.random()*randomNames.length)];
+    player2 = document.getElementById("p2").value || randomNames[Math.floor(Math.random()*randomNames.length)];
+    const w = document.getElementById("secretWord").value.toUpperCase();
+    if(!w.match(/^[A-Z]+$/)){
+        alert("Voer een geldig woord in (A-Z).");
+        return;
+    }
+    word = w;
+    startGame();
 }
 
-/* ===== GAME INIT ===== */
-function beginGame(){
-  guessed = [];
-  wrong = [];
-  errors = 0;
+/* GAME START */
+function startGame(){
+    document.getElementById("start-screen").style.display = "none";
+    document.getElementById("game-screen").style.display = "block";
 
-  // HUD
-  document.getElementById("playerLeft").textContent  = player1;
-  document.getElementById("playerRight").textContent = player2;
+    guessed = [];
+    wrong = [];
+    errors = 0;
 
-  // reset galg
-  const ids = ["base","pole","beam","rope","head","body","armL","armR","legL","legR"];
-  ids.forEach(id => { document.getElementById(id).style.display = "none"; });
+    document.getElementById("playerLeft").textContent = player1;
+    document.getElementById("playerRight").textContent = player2;
 
-  updateWordDisplay();
-  document.getElementById("wrong").textContent = "";
-  showScreen("game");
-  const l = document.getElementById("letter");
-  l.value = "";
-  l.focus();
+    ["base","pole","beam","rope","head","body","armL","armR","legL","legR"]
+        .forEach(id => document.getElementById(id).style.display = "none");
+
+    updateWordDisplay();
+
+    document.getElementById("letter").value = "";
+    document.getElementById("letter").focus();
 }
 
-/* ===== WEERGAVE WOORD ===== */
+/* WEERGAVE WOORD */
 function updateWordDisplay(){
-  const chars = [...word].map(ch => guessed.includes(ch) ? ch : "_");
-  document.getElementById("word-display").textContent = chars.join(" ");
+    const res = [...word].map(c => guessed.includes(c) ? c : "_").join(" ");
+    document.getElementById("word-display").textContent = res;
 }
 
-/* ===== INPUT HANDLING ===== */
-document.getElementById("letter").addEventListener("keydown", function(e){
-  if(e.key === "Enter"){
-    e.preventDefault();
-    guess();
-  }
+/* ENTER=GUESS */
+document.getElementById("letter").addEventListener("keydown", (e)=>{
+    if(e.key === "Enter"){
+        guess();
+    }
 });
 
-/* ===== GUESS ===== */
+/* GOK */
 function guess(){
-  const inp = document.getElementById("letter");
-  let l = (inp.value || "").toUpperCase();
-  inp.value = "";
-  inp.focus();
-  if(!l.match(/^[A-Z]$/)) return;
-  if(guessed.includes(l) || wrong.includes(l)) return;
+    const inp = document.getElementById("letter");
+    let l = inp.value.toUpperCase();
+    inp.value = "";
+    inp.focus();
 
-  if(word.includes(l)){
-    guessed.push(l);
-    updateWordDisplay();
-    if(!document.getElementById("word-display").textContent.includes("_")){
-      win();
+    if(!l.match(/^[A-Z]$/)) return;
+    if(guessed.includes(l) || wrong.includes(l)) return;
+
+    if(word.includes(l)){
+        guessed.push(l);
+        updateWordDisplay();
+        if(!document.getElementById("word-display").textContent.includes("_")){
+            win();
+        }
+    } else {
+        wrong.push(l);
+        document.getElementById("wrong").textContent = wrong.join(" ");
+        drawPart();
     }
-  } else {
-    wrong.push(l);
-    document.getElementById("wrong").textContent = wrong.join(" ");
-    drawNextPart();
-  }
 }
 
-/* ===== GALG OPBOUW =====
-   1: base
-   2: pole
-   3: beam
-   4: rope
-   5: head
-   6: body
-   7: arms
-   8: legs + verlies na 2s
-*/
-function drawNextPart(){
-  switch(errors){
-    case 0: document.getElementById("base").style.display = "block"; break;
-    case 1: document.getElementById("pole").style.display = "block"; break;
-    case 2: document.getElementById("beam").style.display = "block"; break;
-    case 3: document.getElementById("rope").style.display = "block"; break;
-    case 4: document.getElementById("head").style.display = "block"; break;
-    case 5: document.getElementById("body").style.display = "block"; break;
-    case 6:
-      document.getElementById("armL").style.display = "block";
-      document.getElementById("armR").style.display = "block";
-      break;
-    case 7:
-      document.getElementById("legL").style.display = "block";
-      document.getElementById("legR").style.display = "block";
-      setTimeout(lose, 2000);
-      break;
-  }
-  errors++;
+/* GALG OPBOUW */
+function drawPart(){
+    switch(errors){
+        case 0: show("base"); break;
+        case 1: show("pole"); break;
+        case 2: show("beam"); break;
+        case 3: show("rope"); break;
+        case 4: show("head"); break;
+        case 5: show("body"); break;
+        case 6: show("armL"); show("armR"); break;
+        case 7: show("legL"); show("legR"); setTimeout(lose,2000); break;
+    }
+    errors++;
 }
 
-/* ===== RESULTAAT ===== */
+function show(id){
+    document.getElementById(id).style.display = "block";
+}
+
+/* RESULTATEN */
 function win(){
-  const o = document.getElementById("overlay");
-  o.innerHTML = `🎉 YEEEEEEAH ${player1}! 🎉<br/><br/>
-    <button onclick="location.reload()">Opnieuw spelen</button>`;
-  o.style.display = "flex";
+    const o = document.getElementById("overlay");
+    o.innerHTML = `🎉 YEEEEEEAH ${player1}! 🎉<br><br>
+    <button onclick="location.reload()">Opnieuw</button>`;
+    o.style.display = "flex";
 }
 
 function lose(){
-  const o = document.getElementById("overlay");
-  o.innerHTML = `😂 HAHA LOSER<br/><small>Het woord was: ${word}</small><br/><br/>
-    <button onclick="location.reload()">Opnieuw spelen</button>`;
-  o.style.display = "flex";
+    const o = document.getElementById("overlay");
+    o.innerHTML = `😂 HAHA LOSER<br><small>Het woord was: ${word}</small><br><br>
+    <button onclick="location.reload()">Opnieuw</button>`;
+    o.style.display = "flex";
 }
 
-function giveUp(){
-  lose();
-}
+function giveUp(){ lose(); }
 </script>
+
 </body>
 </html>
